@@ -437,6 +437,32 @@ function maybeAuto(){
   autoTimer=setTimeout(()=>takeNotes(true), 3500);
 }
 
+// Parse Claude's JSON, repairing a reply that got cut off mid-string.
+function parseNotes(text){
+  let s=text.replace(/```json|```/g,'').trim();
+  const open=s.indexOf('{'); if(open>0) s=s.slice(open);
+  try{ return JSON.parse(s); }catch{}
+  // Truncated: close any dangling string, then close open brackets in order.
+  let inStr=false, esc2=false; const stack=[];
+  for(let i=0;i<s.length;i++){
+    const c=s[i];
+    if(inStr){ if(esc2) esc2=false; else if(c==='\\') esc2=true; else if(c==='"') inStr=false; continue; }
+    if(c==='"') inStr=true;
+    else if(c==='{'||c==='[') stack.push(c);
+    else if(c==='}'||c===']') stack.pop();
+  }
+  if(inStr) s+='"';
+  // drop a trailing partial token like  "quote": "half a sen
+  s=s.replace(/,\s*"[^"]*"\s*:\s*("[^"]*)?$/,'');
+  while(stack.length){ s+= stack.pop()==='{' ? '}' : ']'; }
+  try{ return JSON.parse(s); }catch(e){
+    // last resort: at least surface a summary so the meeting isn't a loss
+    const m=s.match(/"summary"\s*:\s*"([^"]+)"/);
+    return { summary: m?m[1]:'(Notes were cut off — press Take notes again.)',
+             decisions:[], action_items:[], likely_items:[], open_questions:[] };
+  }
+}
+
 takeBtn.onclick=()=>{ if(recording) stopRec(); takeNotes(false); };
 
 async function takeNotes(auto){
@@ -474,7 +500,7 @@ ${script}`;
     if(key){ headers["x-api-key"]=key; headers["anthropic-version"]="2023-06-01"; headers["anthropic-dangerous-direct-browser-access"]="true"; }
     const r=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers,
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:4000,messages:[{role:"user",content:prompt}]})
     });
     if(!r.ok){
       const detail=await r.text().catch(()=>'');
@@ -484,7 +510,7 @@ ${script}`;
     }
     const data=await r.json();
     rawReply=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    notes=JSON.parse(rawReply.replace(/```json|```/g,'').trim());
+    notes=parseNotes(rawReply);
     drawNotes();
     copyBtn.disabled=false; sendBtn.disabled=false;
     const f=(notes.action_items||[]).length, s=(notes.likely_items||[]).length;
