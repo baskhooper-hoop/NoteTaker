@@ -441,7 +441,10 @@ function maybeAuto(){
 function parseNotes(text){
   let s=text.replace(/```json|```/g,'').trim();
   const open=s.indexOf('{'); if(open>0) s=s.slice(open);
-  try{ return JSON.parse(s); }catch{}
+  // strip raw control characters that break JSON.parse (unescaped newlines/tabs in values)
+  const clean = x => x.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,' ')
+                      .replace(/,\s*([}\]])/g,'$1');   // trailing commas
+  try{ return JSON.parse(clean(s)); }catch{}
   // Truncated: close any dangling string, then close open brackets in order.
   let inStr=false, esc2=false; const stack=[];
   for(let i=0;i<s.length;i++){
@@ -455,7 +458,7 @@ function parseNotes(text){
   // drop a trailing partial token like  "quote": "half a sen
   s=s.replace(/,\s*"[^"]*"\s*:\s*("[^"]*)?$/,'');
   while(stack.length){ s+= stack.pop()==='{' ? '}' : ']'; }
-  try{ return JSON.parse(s); }catch(e){
+  try{ return JSON.parse(clean(s)); }catch(e){
     // last resort: at least surface a summary so the meeting isn't a loss
     const m=s.match(/"summary"\s*:\s*"([^"]+)"/);
     return { summary: m?m[1]:'(Notes were cut off — press Take notes again.)',
@@ -500,7 +503,15 @@ ${script}`;
     if(key){ headers["x-api-key"]=key; headers["anthropic-version"]="2023-06-01"; headers["anthropic-dangerous-direct-browser-access"]="true"; }
     const r=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers,
-      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:4000,messages:[{role:"user",content:prompt}]})
+      body:JSON.stringify({
+        model:"claude-sonnet-4-6",
+        max_tokens:4000,
+        system:"You output only valid, strict JSON. No markdown, no code fences, no commentary. All property names and string values use double quotes. Escape any double quotes inside values. Never include literal newlines inside a string value.",
+        messages:[
+          {role:"user",content:prompt},
+          {role:"assistant",content:"{"}
+        ]
+      })
     });
     if(!r.ok){
       const detail=await r.text().catch(()=>'');
@@ -510,7 +521,8 @@ ${script}`;
     }
     const data=await r.json();
     rawReply=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    notes=parseNotes(rawReply);
+    // the assistant turn was prefilled with "{", so the reply omits it
+    notes=parseNotes('{'+rawReply);
     drawNotes();
     copyBtn.disabled=false; sendBtn.disabled=false;
     const f=(notes.action_items||[]).length, s=(notes.likely_items||[]).length;
@@ -772,9 +784,16 @@ $('#keyMainSave').onclick=async()=>{
   if(!v){ $('#keyState').textContent='Paste a key first.'; return; }
   if(!/^sk-ant-/.test(v)) { $('#keyState').textContent="That doesn't look like an Anthropic key — it should start with sk-ant-."; return; }
   await store.set('apikey', v);
+  // verify the write actually persisted — some browsers block storage silently
+  const check = await store.get('apikey');
+  if(check!==v){
+    $('#keyState').textContent='⚠ This browser blocked saving. Turn off Incognito/private mode, or allow site data for this page, then try again.';
+    return;
+  }
   $('#keyMain').value=''; autoEl.checked=true;
   await drawKeyState();
-  statusEl.textContent='Key saved — press Take notes to test it';
+  statusEl.className='hint';
+  statusEl.textContent='Key saved and verified — press Take notes to test it';
 };
 $('#keyClear').onclick=async()=>{ await store.set('apikey',''); await drawKeyState(); };
 
