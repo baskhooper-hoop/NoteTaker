@@ -166,7 +166,7 @@
     <div class="eyebrow">Meeting record</div>
     <input id="title" placeholder="Untitled meeting">
   </div>
-  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span></div>
+  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span><span style="display:block;font-size:10px;color:var(--slate);margin-top:2px">v8 · 2026-08-20</span></div>
 </header>
 
 <main>
@@ -506,10 +506,9 @@ ${script}`;
       body:JSON.stringify({
         model:"claude-sonnet-4-6",
         max_tokens:4000,
-        system:"You output only valid, strict JSON. No markdown, no code fences, no commentary. All property names and string values use double quotes. Escape any double quotes inside values. Never include literal newlines inside a string value.",
+        system:"You output only valid, strict JSON — no markdown, no code fences, no commentary before or after. Begin your reply with { and end with }. All property names and string values use double quotes. Escape any double quotes inside values. Never put a literal newline inside a string value.",
         messages:[
-          {role:"user",content:prompt},
-          {role:"assistant",content:"{"}
+          {role:"user",content:prompt}
         ]
       })
     });
@@ -521,8 +520,7 @@ ${script}`;
     }
     const data=await r.json();
     rawReply=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    // the assistant turn was prefilled with "{", so the reply omits it
-    notes=parseNotes('{'+rawReply);
+    notes=parseNotes(rawReply);
     drawNotes();
     copyBtn.disabled=false; sendBtn.disabled=false;
     const f=(notes.action_items||[]).length, s=(notes.likely_items||[]).length;
