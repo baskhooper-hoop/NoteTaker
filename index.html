@@ -163,10 +163,10 @@
 
 <header>
   <div>
-    <div class="eyebrow">Meeting record</div>
+    <div class="eyebrow">Meeting record &nbsp;·&nbsp; <span style="color:var(--done);font-weight:600">VERSION 9</span> <span style="color:var(--slate)">(2026-08-21)</span></div>
     <input id="title" placeholder="Untitled meeting">
   </div>
-  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span><span style="display:block;font-size:10px;color:var(--slate);margin-top:2px">v8 · 2026-08-20</span></div>
+  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span></div>
 </header>
 
 <main>
@@ -815,6 +815,9 @@ $('#restoreFile').onchange=async e=>{
     $('#backupState').textContent='Restored '+((d.meetings||[]).length)+' meetings.';
   }catch(err){ $('#backupState').textContent='That file could not be read — is it the backup JSON?'; }
 };
+
+const APP_VERSION = "VERSION 9 (2026-08-21)";
+console.log("%cNoteTaker "+APP_VERSION, "font-size:14px;font-weight:bold;color:#2C6C5B");
 
 drawKeys(); render(); drawLibrary(); drawKeyState(); drawBridge();
 </script>
