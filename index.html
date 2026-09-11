@@ -73,6 +73,21 @@
   .key[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
   .key[aria-pressed="true"] .n{color:#93A3AE}
   .key .x{font-family:var(--mono);color:var(--slate);font-size:12px;margin-left:2px}
+  .key .pip{
+    position:absolute;top:-1px;right:-1px;width:5px;height:5px;border-radius:50%;
+    background:var(--done);opacity:0;transition:opacity .2s;
+  }
+  .key[data-guess="1"] .pip{opacity:1}
+  .key[data-guess="1"]{border-color:var(--done)}
+  .listen{
+    display:flex;align-items:center;gap:10px;margin:-6px 0 14px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--slate);
+  }
+  .level{display:block;width:70px;height:3px;background:var(--rule);overflow:hidden}
+  .level i{display:block;height:3px;width:0;background:var(--ink);transition:width .08s linear}
+  .prof{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--rule);font-size:13px}
+  .prof span.c{font-family:var(--mono);font-size:11px;color:var(--slate)}
   .addkey{
     border:1px dashed var(--rule);background:transparent;color:var(--slate);
     border-radius:2px;padding:9px 12px;font-size:13px;
@@ -163,7 +178,7 @@
 
 <header>
   <div>
-    <div class="eyebrow">Meeting record &nbsp;·&nbsp; <span style="color:var(--done);font-weight:600">VERSION 9</span> <span style="color:var(--slate)">(2026-08-21)</span></div>
+    <div class="eyebrow">Meeting record</div>
     <input id="title" placeholder="Untitled meeting">
   </div>
   <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span></div>
@@ -173,6 +188,10 @@
   <section class="pane" id="capture">
     <div class="eyebrow">Who's in the room — click as they speak, or press 1–8</div>
     <div class="keys" id="keys"></div>
+    <div class="listen" id="listen">
+      <span class="level"><i id="lvl"></i></span>
+      <span id="guess">Voice matching idle</span>
+    </div>
     <div id="transcript"></div>
     <div id="interim"></div>
   </section>
@@ -180,11 +199,11 @@
   <section class="pane" id="out">
     <div class="eyebrow">Notes</div>
     <div id="results">
-      <p class="empty">Nothing extracted yet. Capture a conversation, or paste a Teams/Zoom transcript below, then take notes.</p>
+      <p class="empty">Nothing extracted yet. Capture a conversation, or paste a transcript below, then take notes.</p>
     </div>
     <details id="pastebox">
-      <summary>Paste a Teams / Zoom transcript</summary>
-      <p class="note">The most accurate route for online meetings: turn on transcription in Teams or Zoom, then paste the transcript here (.vtt or “Name: text” lines). Speaker names come across automatically — no microphone, no guessing.</p>
+      <summary>Paste a transcript instead</summary>
+      <p class="note">Works with Teams and Zoom exports (.vtt or “Name: text” lines) — speaker names are read automatically.</p>
       <textarea id="paste" placeholder="Kelly Frasier: Let's set the rotation for the next cycle.&#10;Me: I'll pull the ward list before Friday."></textarea>
       <div class="row"><button class="btn ghost" id="loadPaste">Load transcript</button></div>
     </details>
@@ -192,13 +211,15 @@
       <summary>Saved meetings</summary>
       <div id="savedList"><p class="note">None yet.</p></div>
     </details>
-    <details id="bridge">
-      <summary>Momentum — send tasks</summary>
-      <div id="bridgeBody"></div>
+    <details id="voices">
+      <summary>Voices it has learned</summary>
+      <p class="note">Click a name while that person talks. After a few meetings the app starts guessing on its own — a green dot on a name means it recognised the voice. Correct it by clicking the right name; each correction sharpens the profile.</p>
+      <div id="profList"><p class="note">No voices learned yet.</p></div>
+      <div class="row"><button class="btn ghost" id="wipeVoices">Forget all voices</button></div>
     </details>
     <details id="settings">
       <summary>Settings — API key</summary>
-      <p class="note">Paste your Anthropic API key so notes are written automatically. The key is stored only in this browser and is sent only to Anthropic — never to GitHub or anyone else.</p>
+      <p class="note">Only needed when you run this file from your own desktop. Paste a key and notes start working automatically. It stays on this machine and is only ever sent to Anthropic.</p>
       <div class="row">
         <input id="keyMain" type="password" placeholder="sk-ant-api..."
           style="flex:1;min-width:190px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px;background:#fff;color:var(--ink)">
@@ -207,7 +228,7 @@
       </div>
       <p class="note" id="keyState">No key saved.</p>
       <div class="tier">Backup</div>
-      <p class="note">Your key, saved meetings, and Momentum link live in this browser. Back them up before clearing browser data or switching computers, then restore into the other browser.</p>
+      <p class="note">Before switching to a new version of this file, back up your voices, key, and saved meetings — then restore them into the new copy.</p>
       <div class="row">
         <button class="btn ghost" id="backup">Back up my data</button>
         <button class="btn ghost" id="restore">Restore from backup</button>
@@ -223,7 +244,6 @@
     <button class="btn ghost" id="take" disabled>Take notes</button>
     <label class="auto"><input type="checkbox" id="auto" checked> Notes as we go</label>
     <button class="btn ghost" id="save" disabled>Save</button>
-    <button class="btn ghost" id="send" disabled>Send to Momentum</button>
     <button class="btn ghost" id="copy" disabled>Copy tasks</button>
     <button class="btn ghost" id="copyT" disabled>Copy transcript</button>
     <button class="btn ghost" id="md" disabled>Download notes</button>
@@ -233,7 +253,9 @@
 
 <script>
 /* ============================================================
-   MOMENTUM HAND-OFF
+   MOMENTUM HAND-OFF — the only function you need to change.
+   Once I see momentum.html I'll fill this in so tasks land
+   directly. Until then it copies Momentum-ready JSON.
    ============================================================ */
 function toMomentumTask(item){
   return {
@@ -267,7 +289,7 @@ const titleEl=$('#title'), keysEl=$('#keys'), tEl=$('#transcript'), interimEl=$(
       recBtn=$('#rec'), takeBtn=$('#take'), saveBtn=$('#save'), copyBtn=$('#copy'), mdBtn=$('#md'),
       statusEl=$('#status'), resultsEl=$('#results'), elapsedEl=$('#elapsed'), wcEl=$('#wc');
 
-let speakers=['Me'], active=0, turns=[], notes=null, t0=null, timer=null, rec=null, recording=false, lastStart=0;
+let speakers=['Me'], active=0, turns=[], notes=null, t0=null, timer=null, rec=null, recording=false;
 
 /* ---------- speaker keys ---------- */
 function drawKeys(){
@@ -275,13 +297,15 @@ function drawKeys(){
   speakers.forEach((name,i)=>{
     const b=document.createElement('button');
     b.className='key'; b.setAttribute('aria-pressed', i===active);
-    b.innerHTML='<span class="n">'+(i+1)+'</span>'+esc(name)+
+    if(name===guessedFor) b.dataset.guess='1';
+    b.innerHTML='<span class="pip"></span><span class="n">'+(i+1)+'</span>'+esc(name)+
       (speakers.length>1?'<span class="x" title="Remove">&times;</span>':'');
     b.onclick=e=>{
       if(e.target.classList.contains('x')){
         speakers.splice(i,1); if(active>=speakers.length) active=speakers.length-1; drawKeys(); return;
       }
-      active=i; drawKeys();
+      active=i; touched=true; guessedFor=null; drawKeys();
+      if(guessEl) guessEl.textContent=speakers[i]+' — confirmed';
     };
     b.ondblclick=()=>{ const n=prompt('Name',name); if(n){speakers[i]=n.trim(); drawKeys(); render();} };
     keysEl.appendChild(b);
@@ -296,7 +320,7 @@ function drawKeys(){
 document.addEventListener('keydown',e=>{
   if(/^[1-8]$/.test(e.key) && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)
      && !document.activeElement.isContentEditable){
-    const i=+e.key-1; if(i<speakers.length){active=i; drawKeys();}
+    const i=+e.key-1; if(i<speakers.length){active=i; touched=true; guessedFor=null; drawKeys();}
   }
 });
 
@@ -354,25 +378,16 @@ function startRec(){
       interimEl.textContent=interim;
     };
     rec.onerror=e=>{
-      if(e.error==='not-allowed' || e.error==='service-not-allowed'){
-        statusEl.className='hint working';
-        statusEl.textContent='Microphone blocked — click the camera/mic icon in the address bar, choose Always allow, then Start again. Your transcript is safe.';
-      } else if(e.error==='no-speech'){
-        statusEl.textContent='Listening — no speech yet';
-      } else if(e.error==='aborted'){
-        /* benign restart cycle */
-      } else {
-        statusEl.textContent='Mic glitch ('+e.error+') — still listening';
-      }
+      if(e.error==='not-allowed'){
+        statusEl.textContent='Microphone blocked — open this file in Chrome directly, or paste a transcript';
+        stopRec();
+      } else if(e.error==='no-speech'){ statusEl.textContent='Listening — no speech detected yet'; }
+      else statusEl.textContent='Capture error: '+e.error;
     };
-    rec.onend=()=>{
-      if(!recording) return;
-      const gap = Date.now()-lastStart < 800 ? 900 : 0;
-      setTimeout(()=>{ if(recording){ try{ rec.start(); lastStart=Date.now(); }catch(_){}} }, gap);
-    };
-    rec.start(); lastStart=Date.now();
-    recording=true; recBtn.dataset.on='1'; recBtn.innerHTML='<span class="dot"></span>Stop recording';
-    statusEl.className='hint';
+    rec.onend=()=>{ if(recording){ try{rec.start();}catch{} } };
+    rec.start();
+    startVoice();
+    recording=true; recBtn.dataset.on='1'; recBtn.innerHTML='<span class="dot"></span>Stop recording'; autoFired=false;
     statusEl.textContent='Listening — press 1–8 to switch speaker';
     t0=t0||Date.now();
     timer=setInterval(()=>elapsedEl.textContent=stamp(Date.now()-t0),500);
@@ -380,15 +395,13 @@ function startRec(){
   }catch(err){ statusEl.textContent='Could not start: '+err.message; }
 }
 function stopRec(){
-  recording=false;
-  try{ rec && (rec.onend=null, rec.stop()); }catch{}
-  rec=null;
+  recording=false; try{rec&&rec.stop();}catch{}
+  stopVoice();
   clearInterval(timer); interimEl.textContent='';
   recBtn.dataset.on='0'; recBtn.innerHTML='<span class="dot"></span>Start recording';
-  statusEl.className='hint';
-  statusEl.textContent='Stopped';
+  statusEl.textContent=turns.length?'Stopped':'Stopped';
   clearTimeout(autoTimer);
-  if(autoEl.checked && turns.length) takeNotes(true);
+  if(autoEl.checked && turns.length) takeNotes(true);   // always close with a full read
 }
 
 /* ---------- paste import (Teams / Zoom / plain) ---------- */
@@ -426,44 +439,19 @@ function parseTranscript(raw){
 
 /* ---------- extraction ---------- */
 const autoEl=$('#auto');
-let extracting=false, lastCount=0, lastWords=0, autoTimer=null, rawReply='';
+let extracting=false, lastCount=0, lastWords=0, autoTimer=null, rawReply='', autoFired=false;
 
 const wordCount = () => turns.map(t=>t.text).join(' ').trim().split(/\s+/).filter(Boolean).length;
 
 function maybeAuto(){
   if(!autoEl.checked || extracting) return;
-  if(wordCount() - lastWords < 60) return;
+  autoFired=false;                                // new speech came in — allow another auto-run later
   clearTimeout(autoTimer);
-  autoTimer=setTimeout(()=>takeNotes(true), 3500);
-}
-
-// Parse Claude's JSON, repairing a reply that got cut off mid-string.
-function parseNotes(text){
-  let s=text.replace(/```json|```/g,'').trim();
-  const open=s.indexOf('{'); if(open>0) s=s.slice(open);
-  // strip raw control characters that break JSON.parse (unescaped newlines/tabs in values)
-  const clean = x => x.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,' ')
-                      .replace(/,\s*([}\]])/g,'$1');   // trailing commas
-  try{ return JSON.parse(clean(s)); }catch{}
-  // Truncated: close any dangling string, then close open brackets in order.
-  let inStr=false, esc2=false; const stack=[];
-  for(let i=0;i<s.length;i++){
-    const c=s[i];
-    if(inStr){ if(esc2) esc2=false; else if(c==='\\') esc2=true; else if(c==='"') inStr=false; continue; }
-    if(c==='"') inStr=true;
-    else if(c==='{'||c==='[') stack.push(c);
-    else if(c==='}'||c===']') stack.pop();
-  }
-  if(inStr) s+='"';
-  // drop a trailing partial token like  "quote": "half a sen
-  s=s.replace(/,\s*"[^"]*"\s*:\s*("[^"]*)?$/,'');
-  while(stack.length){ s+= stack.pop()==='{' ? '}' : ']'; }
-  try{ return JSON.parse(clean(s)); }catch(e){
-    // last resort: at least surface a summary so the meeting isn't a loss
-    const m=s.match(/"summary"\s*:\s*"([^"]+)"/);
-    return { summary: m?m[1]:'(Notes were cut off — press Take notes again.)',
-             decisions:[], action_items:[], likely_items:[], open_questions:[] };
-  }
+  autoTimer=setTimeout(()=>{
+    if(autoFired) return;                         // already ran for this silence — don't repeat
+    autoFired=true;
+    takeNotes(true);
+  }, 120000);   // 2 minutes of true silence = meeting's probably over
 }
 
 takeBtn.onclick=()=>{ if(recording) stopRec(); takeNotes(false); };
@@ -477,7 +465,7 @@ async function takeNotes(auto){
   if(!auto && !notes) resultsEl.innerHTML='<p class="empty">Reading the transcript…</p>';
   const script=turns.map(t=>'['+stamp(t.at)+'] '+t.who+': '+t.text).join('\n');
   const prompt=
-`You are a meticulous professional note taker. Below is a meeting transcript with speaker labels. Some speaker labels may be missing or wrong (a single speaker button was left on while several people talked). Use the content of the conversation — who answers whom, names spoken in address, shifts in topic — to attribute turns correctly even where the label looks off.
+`You are a meticulous professional note taker. Below is a meeting transcript with speaker labels.
 
 Distinguish carefully between who SAID something and who is RESPONSIBLE for it. "Kelly, can you pull the numbers?" spoken by Me is an action item OWNED BY Kelly, SAID BY Me. Only record an action item if someone actually committed to or was clearly assigned something. Do not invent items to fill space.
 
@@ -503,26 +491,19 @@ ${script}`;
     if(key){ headers["x-api-key"]=key; headers["anthropic-version"]="2023-06-01"; headers["anthropic-dangerous-direct-browser-access"]="true"; }
     const r=await fetch("https://api.anthropic.com/v1/messages",{
       method:"POST", headers,
-      body:JSON.stringify({
-        model:"claude-sonnet-4-6",
-        max_tokens:4000,
-        system:"You output only valid, strict JSON — no markdown, no code fences, no commentary before or after. Begin your reply with { and end with }. All property names and string values use double quotes. Escape any double quotes inside values. Never put a literal newline inside a string value.",
-        messages:[
-          {role:"user",content:prompt}
-        ]
-      })
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})
     });
     if(!r.ok){
       const detail=await r.text().catch(()=>'');
       throw new Error(r.status+(r.status===401||r.status===403
-        ? ' — the API key is missing or invalid. Open Settings and paste a valid key.'
+        ? ' — no API access from this page. See "If notes keep failing" below.'
         : ' '+detail.slice(0,120)));
     }
     const data=await r.json();
     rawReply=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-    notes=parseNotes(rawReply);
+    notes=JSON.parse(rawReply.replace(/```json|```/g,'').trim());
     drawNotes();
-    copyBtn.disabled=false; sendBtn.disabled=false;
+    copyBtn.disabled=false;
     const f=(notes.action_items||[]).length, s=(notes.likely_items||[]).length;
     statusEl.className='hint';
     statusEl.textContent = f||s
@@ -531,14 +512,25 @@ ${script}`;
   }catch(err){
     statusEl.className='hint';
     statusEl.textContent='Notes failed — transcript is safe';
-    autoEl.checked=false;
+    autoEl.checked=false;                       // stop retrying on a loop
     resultsEl.innerHTML=
       '<p class="err">Couldn\'t take notes: '+esc(err.message)+'</p>'+
       '<div class="tier">If notes keep failing</div>'+
       '<div class="card"><p class="note" style="margin-top:0">The transcript is captured and safe — only the summarising step failed. '+
       'Press <b>Copy transcript</b> and paste it into a Claude chat; you\'ll get the same notes back in seconds.</p>'+
-      '<p class="note">To fix it, open <b>Settings — API key</b> and paste a valid Anthropic key.</p></div>'+
+      '<p class="note">To fix it permanently, paste an Anthropic API key below. It stays on this machine and is never sent anywhere but Anthropic.</p>'+
+      '<div class="row"><input id="keyIn" type="password" placeholder="sk-ant-..." '+
+      'style="flex:1;min-width:200px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px">'+
+      '<button class="btn ghost" id="keySave">Save key</button></div></div>'+
       (rawReply?'<details><summary>Raw response</summary><pre class="raw">'+esc(rawReply)+'</pre></details>':'');
+    const ks=$('#keySave');
+    if(ks) ks.onclick=async()=>{
+      const v=$('#keyIn').value.trim();
+      if(!v) return;
+      await store.set('apikey', v);
+      ks.textContent='Saved — try again';
+      autoEl.checked=true;
+    };
   }
   extracting=false;
   takeBtn.disabled=false; takeBtn.textContent='Take notes';
@@ -572,121 +564,146 @@ function drawNotes(){
 }
 
 /* ============================================================
-   MOMENTUM BRIDGE
-   Same-origin only: works when momentum.html lives on THIS site.
-   Detects when it can't reach Momentum's data and says so plainly
-   rather than silently finding nothing.
+   VOICE FINGERPRINTING (tier 1)
+   A second mic stream, analysed locally. Builds a per-person
+   acoustic profile from the names you click, then starts
+   guessing. Nothing leaves the machine.
    ============================================================ */
-const TITLE_KEYS=['title','text','name','task','label','content','todo'];
-const DONE_KEYS=['done','completed','complete','isDone','checked','finished'];
-const OWNER_KEYS=['owner','assignee','assignedTo','who','person'];
-const DUE_KEYS=['due','dueDate','deadline','date','when'];
-const NOTE_KEYS=['notes','note','description','detail','details'];
+const BANDS=12, DIM=BANDS+2, MIN_FRAMES=6, ACCEPT=0.62, MARGIN=0.86;
+let profiles={};                 // name -> {v:[DIM], n:count}
+let ac=null, analyser=null, micStream=null, rafId=null;
+let seg=null, touched=false, silence=0, guessedFor=null;
+const lvlEl=$('#lvl'), guessEl=$('#guess');
 
-function candidates(){
-  const out=[];
-  if(!LS) return out;
-  for(let i=0;i<LS.length;i++){
-    const k=LS.key(i);
-    if(k.startsWith('nt:')) continue;
-    let val; try{ val=JSON.parse(LS.getItem(k)); }catch{ continue; }
-    const arrays=[];
-    if(Array.isArray(val)) arrays.push({path:null, arr:val});
-    else if(val && typeof val==='object'){
-      for(const f of Object.keys(val)) if(Array.isArray(val[f])) arrays.push({path:f, arr:val[f]});
-    }
-    for(const {path,arr} of arrays){
-      const objs=arr.filter(x=>x&&typeof x==='object');
-      if(!objs.length) continue;
-      const fields=[...new Set(objs.flatMap(o=>Object.keys(o)))];
-      const titleField=TITLE_KEYS.find(t=>fields.includes(t));
-      if(!titleField) continue;
-      out.push({key:k, path, count:objs.length, fields, titleField,
-        doneField:DONE_KEYS.find(t=>fields.includes(t)),
-        ownerField:OWNER_KEYS.find(t=>fields.includes(t)),
-        dueField:DUE_KEYS.find(t=>fields.includes(t)),
-        noteField:NOTE_KEYS.find(t=>fields.includes(t)),
-        sample:objs[0][TITLE_KEYS.find(t=>objs[0][t]!==undefined)||titleField]});
-    }
-  }
-  return out.sort((a,b)=>b.count-a.count);
+async function startVoice(){
+  if(ac) return;
+  try{
+    micStream=await navigator.mediaDevices.getUserMedia({audio:{
+      echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+    ac=new (window.AudioContext||window.webkitAudioContext)();
+    const src=ac.createMediaStreamSource(micStream);
+    analyser=ac.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.4;
+    src.connect(analyser);
+    loop();
+  }catch(e){ guessEl.textContent='Voice matching unavailable'; }
+}
+function stopVoice(){
+  cancelAnimationFrame(rafId);
+  if(micStream) micStream.getTracks().forEach(t=>t.stop());
+  if(ac) ac.close();
+  ac=null; analyser=null; micStream=null; seg=null;
+  lvlEl.style.width='0'; guessEl.textContent='Voice matching idle';
+  saveProfiles();
 }
 
-function drawBridge(){
-  const el=$('#bridgeBody');
-  const host=location.host || '';
-  const onWeb = location.protocol.startsWith('http');
-  el.innerHTML=
-    '<p class="note">Sending tasks straight into Momentum works when Momentum lives on this same site '+
-    (onWeb?'(<b>'+esc(host)+'</b>)':'(same folder)')+'. Browsers keep each site\u2019s data private, so a Momentum kept elsewhere can\u2019t be reached from here — use <b>Copy tasks</b> for that.</p>'+
-    '<div class="row"><button class="btn ghost" id="scan">Scan for Momentum here</button></div>'+
-    '<div id="scanOut"></div>';
-  $('#scan').onclick=doScan;
-}
+function loop(){
+  rafId=requestAnimationFrame(loop);
+  if(!analyser) return;
+  const N=analyser.fftSize;
+  const time=new Float32Array(N), freq=new Float32Array(analyser.frequencyBinCount);
+  analyser.getFloatTimeDomainData(time);
+  analyser.getFloatFrequencyData(freq);
 
-async function doScan(){
-  const el=$('#scanOut');
-  if(!LS){ el.innerHTML='<p class="err">This browser has storage disabled, so the bridge can\u2019t work. Use Copy tasks.</p>'; return; }
-  const c=candidates();
-  if(!c.length){
-    el.innerHTML='<p class="err">No Momentum task list found on this site.</p>'+
-      '<p class="note">This is expected if Momentum isn\u2019t hosted here yet. To enable direct sending, add <b>momentum.html</b> to this same GitHub repo and open it once. Until then, <b>Copy tasks</b> gives you clean JSON to paste into Momentum.</p>'+
-      '<details><summary>Storage keys on this site</summary><pre class="raw">'+
-      esc(Array.from({length:LS.length},(_,i)=>LS.key(i)).filter(k=>!k.startsWith('nt:')).join('\n')||'(none)')+'</pre></details>';
+  let sum=0; for(let i=0;i<N;i++) sum+=time[i]*time[i];
+  const rms=Math.sqrt(sum/N);
+  lvlEl.style.width=Math.min(100, rms*900)+'%';
+
+  if(rms < 0.012){                       // silence
+    silence++;
+    if(seg && silence>26) closeSeg();    // ~450ms of quiet ends the turn
     return;
   }
-  const chosen=await store.get('bridge');
-  el.innerHTML='<p class="note">Found '+c.length+' possible task list'+(c.length>1?'s':'')+'. Pick the one that is Momentum:</p>'+
-    c.map((x,i)=>'<div class="card"><div class="t">'+esc(x.key)+(x.path?' → '+esc(x.path):'')+'</div>'+
-      '<div class="meta">'+x.count+' existing tasks · title field &ldquo;'+esc(x.titleField)+'&rdquo;'+
-      (x.ownerField?' · owner &ldquo;'+esc(x.ownerField)+'&rdquo;':'')+'</div>'+
-      (x.sample?'<blockquote>'+esc(String(x.sample).slice(0,80))+'</blockquote>':'')+
-      '<div class="row"><button class="btn ghost pick" data-i="'+i+'">'+
-      (chosen&&chosen.key===x.key&&chosen.path===x.path?'Selected':'Use this one')+'</button></div></div>').join('');
-  el.querySelectorAll('.pick').forEach(b=>b.onclick=async()=>{
-    await store.set('bridge', c[+b.dataset.i]);
-    el.querySelectorAll('.pick').forEach(x=>x.textContent='Use this one');
-    b.textContent='Selected';
-    sendBtn.disabled=!notes;
-    statusEl.textContent='Momentum linked — Send to Momentum is ready';
-  });
+  silence=0;
+  const vec=features(time, freq, ac.sampleRate, analyser.frequencyBinCount);
+  if(!seg) seg={sum:new Array(DIM).fill(0), n:0};
+  for(let i=0;i<DIM;i++) seg.sum[i]+=vec[i];
+  seg.n++;
+  if(seg.n===MIN_FRAMES && !touched) tryGuess(mean(seg));
 }
 
-async function sendToMomentum(){
-  const cfg=await store.get('bridge');
-  if(!cfg){ statusEl.textContent='Open Momentum panel and Scan first, or use Copy tasks'; $('#bridge').open=true; return; }
-  const items=[...(notes.action_items||[]), ...(notes.likely_items||[]).map(a=>({...a, tentative:true}))];
-  if(!items.length){ statusEl.textContent='No action items to send'; return; }
-  let root; try{ root=JSON.parse(LS.getItem(cfg.key)); }catch{ root=null; }
-  if(!root){ statusEl.textContent='Momentum\'s data has changed — scan again'; return; }
-  const arr = cfg.path ? root[cfg.path] : root;
-  if(!Array.isArray(arr)){ statusEl.textContent='Momentum\'s data has changed — scan again'; return; }
-
-  const existing=new Set(arr.map(t=>String(t[cfg.titleField]||'').toLowerCase().trim()));
-  let added=0;
-  for(const a of items){
-    if(existing.has(a.task.toLowerCase().trim())) continue;
-    const t={};
-    t[cfg.titleField]=a.task;
-    if(cfg.doneField) t[cfg.doneField]=false;
-    if(cfg.ownerField && a.owner) t[cfg.ownerField]=a.owner;
-    if(cfg.dueField && a.due) t[cfg.dueField]=a.due;
-    if(cfg.noteField){
-      t[cfg.noteField]=(titleEl.value?'From: '+titleEl.value+'. ':'')+
-        (a.quote?'“'+a.quote+'” — '+(a.said_by||'unknown'):'')+(a.tentative?' (unconfirmed)':'');
-    }
-    t.id = Date.now()+Math.floor(Math.random()*1000);
-    t.createdAt = new Date().toISOString();
-    arr.push(t); existing.add(a.task.toLowerCase().trim()); added++;
+function features(time, freq, sr, bins){
+  // log band energies — coarse timbre
+  const out=new Array(DIM).fill(0);
+  const lo=80, hi=5200, hzPerBin=(sr/2)/bins;
+  for(let b=0;b<BANDS;b++){
+    const f0=lo*Math.pow(hi/lo, b/BANDS), f1=lo*Math.pow(hi/lo,(b+1)/BANDS);
+    let acc=0, c=0;
+    for(let k=Math.floor(f0/hzPerBin); k<Math.ceil(f1/hzPerBin) && k<bins; k++){ acc+=freq[k]; c++; }
+    out[b]= c ? acc/c : -100;
   }
-  try{
-    LS.setItem(cfg.key, JSON.stringify(root));
-    statusEl.className='hint';
-    statusEl.textContent=added?added+' task'+(added===1?'':'s')+' sent — refresh Momentum to see them':'Already in Momentum, nothing new';
-    sendBtn.textContent=added?'Sent ✓':'Already there';
-    setTimeout(()=>sendBtn.textContent='Send to Momentum',2200);
-  }catch(err){ statusEl.textContent='Could not write to Momentum: '+err.message; }
+  // remove overall loudness (cepstral-mean style) so distance is about timbre
+  const m=out.slice(0,BANDS).reduce((a,b)=>a+b,0)/BANDS;
+  let norm=0;
+  for(let b=0;b<BANDS;b++){ out[b]=(out[b]-m)/18; norm+=out[b]*out[b]; }
+  norm=Math.sqrt(norm)||1;
+  for(let b=0;b<BANDS;b++) out[b]/=norm;
+  // pitch via autocorrelation, log-scaled — the strongest single cue
+  out[BANDS]=Math.log(pitch(time, sr)||120)/Math.log(400);
+  // spectral centroid
+  let num=0, den=0;
+  for(let k=0;k<bins;k++){ const p=Math.pow(10, freq[k]/20); num+=k*hzPerBin*p; den+=p; }
+  out[BANDS+1]=den ? Math.min(1,(num/den)/4000) : 0;
+  return out;
 }
+function pitch(buf, sr){
+  const lo=Math.floor(sr/350), hi=Math.floor(sr/70);
+  let best=-1, bestLag=-1;
+  for(let lag=lo; lag<hi; lag++){
+    let c=0; for(let i=0;i<buf.length-lag;i++) c+=buf[i]*buf[i+lag];
+    if(c>best){ best=c; bestLag=lag; }
+  }
+  return bestLag>0 ? sr/bestLag : 0;
+}
+const mean = s => s.sum.map(v=>v/s.n);
+const dist = (a,b) => { let d=0; for(let i=0;i<DIM;i++){ const x=a[i]-b[i]; d+=x*x; } return Math.sqrt(d); };
+
+function tryGuess(vec){
+  const names=Object.keys(profiles).filter(n=>speakers.includes(n) && profiles[n].n>=4);
+  if(names.length<2){ guessEl.textContent='Learning voices — keep clicking names'; return; }
+  const scored=names.map(n=>({n, d:dist(vec, profiles[n].v)})).sort((a,b)=>a.d-b.d);
+  const best=scored[0], second=scored[1];
+  const confident = best.d < ACCEPT && best.d < second.d*MARGIN;
+  if(confident){
+    const i=speakers.indexOf(best.n);
+    if(i>=0){ active=i; guessedFor=best.n; drawKeys(); }
+    guessEl.textContent='Sounds like '+best.n;
+  } else {
+    guessedFor=null; drawKeys();
+    guessEl.textContent='Not sure who — click a name';
+  }
+}
+function closeSeg(){
+  const s=seg; seg=null;
+  if(!s || s.n<MIN_FRAMES) { touched=false; return; }
+  const vec=mean(s);
+  const name=speakers[active];
+  // train hard on what you confirmed, gently on its own confident guesses
+  train(name, vec, touched ? 1 : (guessedFor===name ? 0.25 : 0));
+  touched=false; guessedFor=null;
+  drawProfiles();
+}
+function train(name, vec, weight){
+  if(!name || weight<=0) return;
+  const p = profiles[name] || (profiles[name]={v:vec.slice(), n:0});
+  const w = weight, n=p.n;
+  for(let i=0;i<DIM;i++) p.v[i] = (p.v[i]*n + vec[i]*w) / (n + w);
+  p.n = n + w;
+}
+async function saveProfiles(){ await store.set('voices', profiles); }
+async function loadProfiles(){ profiles=(await store.get('voices'))||{}; drawProfiles(); }
+function drawProfiles(){
+  const el=$('#profList'), names=Object.keys(profiles);
+  if(!names.length){ el.innerHTML='<p class="note">No voices learned yet.</p>'; return; }
+  el.innerHTML=names.sort().map(n=>{
+    const c=Math.round(profiles[n].n);
+    const state = c<4 ? 'learning' : c<12 ? 'usable' : 'confident';
+    return '<div class="prof"><span>'+esc(n)+'</span><span class="c">'+c+' samples · '+state+'</span></div>';
+  }).join('');
+}
+$('#wipeVoices').onclick=async()=>{
+  if(!confirm('Forget every learned voice? Names and transcripts are untouched.')) return;
+  profiles={}; await saveProfiles(); drawProfiles();
+};
 
 /* ---------- new meeting ---------- */
 let savedMark='';
@@ -698,7 +715,7 @@ $('#fresh').onclick=()=>{
   turns=[]; notes=null; rawReply=''; lastCount=0; lastWords=0; savedMark='';
   t0=null; elapsedEl.textContent='00:00'; titleEl.value=''; active=0;
   resultsEl.innerHTML='<p class="empty">Nothing extracted yet. Start recording, or paste a transcript below.</p>';
-  copyBtn.disabled=true; sendBtn.disabled=true; $('#paste').value='';
+  copyBtn.disabled=true; $('#paste').value='';
   drawKeys(); render();
   statusEl.className='hint';
   statusEl.textContent='New meeting — the same people carried over';
@@ -707,8 +724,6 @@ $('#fresh').onclick=()=>{
 
 /* ---------- outputs ---------- */
 const copyTBtn=$('#copyT');
-const sendBtn=$('#send');
-sendBtn.onclick=()=>sendToMomentum();
 copyTBtn.onclick=async()=>{
   const script=turns.map(t=>'['+stamp(t.at)+'] '+t.who+': '+t.text).join('\n');
   const block='Take professional meeting notes from this transcript: summary, decisions, '+
@@ -763,7 +778,7 @@ async function drawLibrary(){
     b.onclick=()=>{
       titleEl.value=m.title; speakers=m.speakers; turns=m.turns; notes=m.notes; active=0;
       lastCount=turns.length; lastWords=0; savedMark=JSON.stringify(turns); t0=null;
-      drawKeys(); render(); if(notes){drawNotes(); copyBtn.disabled=false; sendBtn.disabled=false;}
+      drawKeys(); render(); if(notes){drawNotes(); copyBtn.disabled=false;}
       $('#library').open=false;
     };
     d.appendChild(b); el.appendChild(d);
@@ -782,44 +797,34 @@ $('#keyMainSave').onclick=async()=>{
   if(!v){ $('#keyState').textContent='Paste a key first.'; return; }
   if(!/^sk-ant-/.test(v)) { $('#keyState').textContent="That doesn't look like an Anthropic key — it should start with sk-ant-."; return; }
   await store.set('apikey', v);
-  // verify the write actually persisted — some browsers block storage silently
-  const check = await store.get('apikey');
-  if(check!==v){
-    $('#keyState').textContent='⚠ This browser blocked saving. Turn off Incognito/private mode, or allow site data for this page, then try again.';
-    return;
-  }
   $('#keyMain').value=''; autoEl.checked=true;
   await drawKeyState();
-  statusEl.className='hint';
-  statusEl.textContent='Key saved and verified — press Take notes to test it';
+  statusEl.textContent='Key saved — press Take notes to test it';
 };
 $('#keyClear').onclick=async()=>{ await store.set('apikey',''); await drawKeyState(); };
 
 $('#backup').onclick=async()=>{
-  const dump={ v:2, saved:new Date().toISOString(),
-    apikey:await store.get('apikey'), meetings:await store.get('meetings'), bridge:await store.get('bridge') };
+  const dump={ v:1, saved:new Date().toISOString(),
+    voices:await store.get('voices'), apikey:await store.get('apikey'), meetings:await store.get('meetings') };
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(dump,null,2)],{type:'application/json'}));
   a.download='notetaker-backup.json'; a.click(); URL.revokeObjectURL(a.href);
-  $('#backupState').textContent='Backed up to your Downloads folder.';
+  $('#backupState').textContent='Backed up to your Downloads folder. Keep it with the app.';
 };
 $('#restore').onclick=()=>$('#restoreFile').click();
 $('#restoreFile').onchange=async e=>{
   const f=e.target.files[0]; if(!f) return;
   try{
     const d=JSON.parse(await f.text());
+    if(d.voices) await store.set('voices', d.voices);
     if(d.apikey) await store.set('apikey', d.apikey);
     if(d.meetings) await store.set('meetings', d.meetings);
-    if(d.bridge) await store.set('bridge', d.bridge);
-    await drawKeyState(); await drawLibrary();
-    $('#backupState').textContent='Restored '+((d.meetings||[]).length)+' meetings.';
+    await loadProfiles(); await drawKeyState(); await drawLibrary();
+    $('#backupState').textContent='Restored '+Object.keys(d.voices||{}).length+' voices and '+((d.meetings||[]).length)+' meetings.';
   }catch(err){ $('#backupState').textContent='That file could not be read — is it the backup JSON?'; }
 };
 
-const APP_VERSION = "VERSION 9 (2026-08-21)";
-console.log("%cNoteTaker "+APP_VERSION, "font-size:14px;font-weight:bold;color:#2C6C5B");
-
-drawKeys(); render(); drawLibrary(); drawKeyState(); drawBridge();
+drawKeys(); render(); drawLibrary(); drawKeyState(); loadProfiles();
 </script>
 </body>
 </html>
