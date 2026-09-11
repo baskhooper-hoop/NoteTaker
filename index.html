@@ -181,7 +181,7 @@
     <div class="eyebrow">Meeting record</div>
     <input id="title" placeholder="Untitled meeting">
   </div>
-  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span></div>
+  <div class="clock"><b id="elapsed">00:00</b><span id="wc">0 words</span><span id="cost" title="Estimated API spend this session">$0.0000</span></div>
 </header>
 
 <main>
@@ -440,6 +440,30 @@ function parseTranscript(raw){
 /* ---------- extraction ---------- */
 const autoEl=$('#auto');
 let extracting=false, lastCount=0, lastWords=0, autoTimer=null, rawReply='', autoFired=false;
+const PRICE_IN_PER_M=3, PRICE_OUT_PER_M=15;   // Sonnet $/million tokens, input/output
+const costEl=$('#cost');
+function currentMonthKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1); }
+function loadCost(){
+  const savedMonth=localStorage.getItem('nt_costMonth');
+  const nowMonth=currentMonthKey();
+  if(savedMonth!==nowMonth){
+    localStorage.setItem('nt_costMonth', nowMonth);
+    localStorage.setItem('nt_totalCost', '0');
+    return 0;
+  }
+  return parseFloat(localStorage.getItem('nt_totalCost')||'0');
+}
+let totalCost=loadCost();
+function paintCost(){ costEl.textContent='$'+totalCost.toFixed(4)+' this month'; }
+function addUsage(usage){
+  if(!usage) return;
+  totalCost=loadCost();                          // catch month rollover even mid-session
+  const inTok=usage.input_tokens||0, outTok=usage.output_tokens||0;
+  totalCost += (inTok/1e6)*PRICE_IN_PER_M + (outTok/1e6)*PRICE_OUT_PER_M;
+  localStorage.setItem('nt_totalCost', totalCost.toFixed(6));
+  paintCost();
+}
+paintCost();
 
 const wordCount = () => turns.map(t=>t.text).join(' ').trim().split(/\s+/).filter(Boolean).length;
 
@@ -500,6 +524,7 @@ ${script}`;
         : ' '+detail.slice(0,120)));
     }
     const data=await r.json();
+    addUsage(data.usage);
     rawReply=data.content.filter(c=>c.type==='text').map(c=>c.text).join('');
     notes=JSON.parse(rawReply.replace(/```json|```/g,'').trim());
     drawNotes();
