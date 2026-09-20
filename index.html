@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Record — meeting notes</title>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -41,7 +40,7 @@
   input:focus-visible,
   textarea:focus-visible{
     outline:2px solid var(--ink);
-    outline-offset:2px;
+    outline-offset:2px
   }
 
   .eyebrow{
@@ -51,8 +50,6 @@
     text-transform:uppercase;
     color:var(--slate);
   }
-
-  /* ---------- shell ---------- */
 
   header{
     border-bottom:1px solid var(--rule);
@@ -89,7 +86,7 @@
     font-family:var(--mono);
     font-size:13px;
     color:var(--slate);
-    text-align:right;
+    text-align:right
   }
 
   .clock b{
@@ -97,23 +94,21 @@
     font-size:22px;
     font-weight:500;
     color:var(--ink);
-    letter-spacing:-.02em;
+    letter-spacing:-.02em
   }
 
   main{
     display:grid;
     grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
     gap:0;
-    min-height:60vh;
+    min-height:60vh
   }
 
-  .pane{
-    padding:20px 22px 120px;
-  }
+  .pane{padding:20px 22px 120px}
 
   .pane+.pane{
     border-left:1px solid var(--rule);
-    background:var(--wash);
+    background:var(--wash)
   }
 
   @media(max-width:840px){
@@ -121,7 +116,7 @@
 
     .pane+.pane{
       border-left:0;
-      border-top:1px solid var(--rule);
+      border-top:1px solid var(--rule)
     }
 
     .pane{padding-bottom:24px}
@@ -129,13 +124,11 @@
     #capture{padding-bottom:8px}
   }
 
-  /* ---------- speaker keys ---------- */
-
   .keys{
     display:flex;
     gap:6px;
     flex-wrap:wrap;
-    margin:10px 0 16px;
+    margin:10px 0 16px
   }
 
   .key{
@@ -156,7 +149,7 @@
   .key .n{
     font-family:var(--mono);
     font-size:10px;
-    color:var(--slate);
+    color:var(--slate)
   }
 
   .key:hover{border-color:var(--slate)}
@@ -164,7 +157,7 @@
   .key[aria-pressed="true"]{
     background:var(--ink);
     color:#fff;
-    border-color:var(--ink);
+    border-color:var(--ink)
   }
 
   .key[aria-pressed="true"] .n{color:#93A3AE}
@@ -173,7 +166,7 @@
     font-family:var(--mono);
     color:var(--slate);
     font-size:12px;
-    margin-left:2px;
+    margin-left:2px
   }
 
   .key .pip{
@@ -185,7 +178,7 @@
     border-radius:50%;
     background:var(--done);
     opacity:0;
-    transition:opacity .2s;
+    transition:opacity .2s
   }
 
   .key[data-guess="1"] .pip{opacity:1}
@@ -208,7 +201,7 @@
     width:70px;
     height:3px;
     background:var(--rule);
-    overflow:hidden;
+    overflow:hidden
   }
 
   .level i{
@@ -216,7 +209,7 @@
     height:3px;
     width:0;
     background:var(--ink);
-    transition:width .08s linear;
+    transition:width .08s linear
   }
 
   .prof{
@@ -225,13 +218,13 @@
     gap:10px;
     padding:7px 0;
     border-bottom:1px solid var(--rule);
-    font-size:13px;
+    font-size:13px
   }
 
   .prof span.c{
     font-family:var(--mono);
     font-size:11px;
-    color:var(--slate);
+    color:var(--slate)
   }
 
   .addkey{
@@ -242,8 +235,6 @@
     padding:9px 12px;
     font-size:13px;
   }
-
-  /* ---------- transcript ---------- */
 
   #transcript{border-top:1px solid var(--rule)}
 
@@ -259,7 +250,7 @@
     font-family:var(--mono);
     font-size:11px;
     color:var(--slate);
-    padding-top:5px;
+    padding-top:5px
   }
 
   .who{
@@ -274,13 +265,13 @@
   .said{
     font-family:var(--display);
     font-size:17.5px;
-    line-height:1.48;
+    line-height:1.48
   }
 
   .said[contenteditable]:focus{
     outline:none;
     background:#fff;
-    box-shadow:0 0 0 6px #fff;
+    box-shadow:0 0 0 6px #fff
   }
 
   #interim{
@@ -288,17 +279,15 @@
     font-size:17.5px;
     color:var(--slate);
     font-style:italic;
-    padding:11px 0 0 76px;
+    padding:11px 0 0 76px
   }
 
   .empty{
     color:var(--slate);
     font-size:14px;
     padding:26px 0;
-    max-width:44ch;
+    max-width:44ch
   }
-
-  /* ---------- controls ---------- */
 
   .dock{
     position:sticky;
@@ -318,7 +307,7 @@
       position:fixed;
       left:0;
       right:0;
-      box-shadow:0 -8px 20px rgba(24,34,44,.07);
+      box-shadow:0 -8px 20px rgba(24,34,44,.07)
     }
   }
 
@@ -334,19 +323,19 @@
 
   .btn.ghost{
     background:transparent;
-    color:var(--ink);
+    color:var(--ink)
   }
 
   .btn.ghost:hover{background:#fff}
 
   .btn[disabled]{
     opacity:.4;
-    cursor:not-allowed;
+    cursor:not-allowed
   }
 
   .btn.rec[data-on="1"]{
     background:var(--live);
-    border-color:var(--live);
+    border-color:var(--live)
   }
 
   .dot{
@@ -360,7 +349,7 @@
   }
 
   .btn.rec[data-on="1"] .dot{
-    animation:pulse 1.15s ease-in-out infinite;
+    animation:pulse 1.15s ease-in-out infinite
   }
 
   @keyframes pulse{
@@ -376,7 +365,7 @@
     font-family:var(--mono);
     font-size:11px;
     color:var(--slate);
-    margin-left:auto;
+    margin-left:auto
   }
 
   .auto{
@@ -393,14 +382,14 @@
 
   .auto input{
     accent-color:var(--ink);
-    cursor:pointer;
+    cursor:pointer
   }
 
   .working{color:var(--live)}
 
   .card.soft{
     background:transparent;
-    border-style:dashed;
+    border-style:dashed
   }
 
   .card.soft .t{font-weight:400}
@@ -411,7 +400,7 @@
     letter-spacing:.12em;
     text-transform:uppercase;
     color:var(--slate);
-    margin:18px 0 6px;
+    margin:18px 0 6px
   }
 
   pre.raw{
@@ -426,13 +415,11 @@
     overflow:auto;
   }
 
-  /* ---------- results ---------- */
-
   h2{
     font-family:var(--display);
     font-weight:500;
     font-size:19px;
-    margin:22px 0 8px;
+    margin:22px 0 8px
   }
 
   h2:first-child{margin-top:0}
@@ -442,18 +429,18 @@
     border:1px solid var(--rule);
     border-radius:2px;
     padding:14px;
-    margin-bottom:10px;
+    margin-bottom:10px
   }
 
   .summary{
     font-family:var(--display);
     font-size:16.5px;
-    line-height:1.55;
+    line-height:1.55
   }
 
   ul{
     margin:0;
-    padding-left:18px;
+    padding-left:18px
   }
 
   li{margin-bottom:6px}
@@ -462,12 +449,12 @@
     display:grid;
     grid-template-columns:22px 1fr;
     gap:10px;
-    align-items:start;
+    align-items:start
   }
 
   .task input[type=checkbox]{
     margin-top:5px;
-    accent-color:var(--done);
+    accent-color:var(--done)
   }
 
   .task .t{font-weight:500}
@@ -478,7 +465,7 @@
     letter-spacing:.06em;
     text-transform:uppercase;
     color:var(--slate);
-    margin-top:3px;
+    margin-top:3px
   }
 
   .meta .own{color:var(--done)}
@@ -511,20 +498,20 @@
     display:flex;
     gap:8px;
     flex-wrap:wrap;
-    margin-top:10px;
+    margin-top:10px
   }
 
   .note{
     font-size:12.5px;
     color:var(--slate);
-    margin-top:8px;
+    margin-top:8px
   }
 
   .err{
     border-left:3px solid var(--live);
     padding-left:10px;
     font-size:13px;
-    color:var(--ink);
+    color:var(--ink)
   }
 
   details summary{
@@ -534,7 +521,7 @@
     text-transform:uppercase;
     color:var(--slate);
     cursor:pointer;
-    margin-top:16px;
+    margin-top:16px
   }
 
   .saved{
@@ -543,7 +530,7 @@
     display:flex;
     justify-content:space-between;
     gap:10px;
-    font-size:13px;
+    font-size:13px
   }
 
   .saved button{
@@ -551,15 +538,7 @@
     background:transparent;
     color:var(--slate);
     font-family:var(--mono);
-    font-size:11px;
-  }
-
-  .key-ok{
-    color:var(--done);
-  }
-
-  .key-warning{
-    color:var(--live);
+    font-size:11px
   }
 </style>
 </head>
@@ -580,159 +559,142 @@
 
 <main>
 
-  <section class="pane" id="capture">
+<section class="pane" id="capture">
 
-    <div class="eyebrow">
-      Who's in the room — click as they speak, or press 1–8
-    </div>
-
-    <div class="keys" id="keys"></div>
-
-    <div class="listen" id="listen">
-      <span class="level">
-        <i id="lvl"></i>
-      </span>
-      <span id="guess">Voice matching idle</span>
-    </div>
-
-    <div id="transcript"></div>
-    <div id="interim"></div>
-
-  </section>
-
-  <section class="pane" id="out">
-
-    <div class="eyebrow">Notes</div>
-
-    <div id="results">
-      <p class="empty">
-        Nothing extracted yet. Capture a conversation, or paste a transcript below, then take notes.
-      </p>
-    </div>
-
-    <details id="pastebox">
-      <summary>Paste a transcript instead</summary>
-
-      <p class="note">
-        Works with Teams and Zoom exports (.vtt or “Name: text” lines) — speaker names are read automatically.
-      </p>
-
-      <textarea
-        id="paste"
-        placeholder="Kelly Frasier: Let's set the rotation for the next cycle.&#10;Me: I'll pull the ward list before Friday."
-      ></textarea>
-
-      <div class="row">
-        <button class="btn ghost" id="loadPaste">Load transcript</button>
-      </div>
-    </details>
-
-    <details id="library">
-      <summary>Saved meetings</summary>
-      <div id="savedList">
-        <p class="note">None yet.</p>
-      </div>
-    </details>
-
-    <details id="voices">
-      <summary>Voices it has learned</summary>
-
-      <p class="note">
-        Click a name while that person talks. After a few meetings the app starts guessing on its own — a green dot on a name means it recognised the voice. Correct it by clicking the right name; each correction sharpens the profile.
-      </p>
-
-      <div id="profList">
-        <p class="note">No voices learned yet.</p>
-      </div>
-
-      <div class="row">
-        <button class="btn ghost" id="wipeVoices">Forget all voices</button>
-      </div>
-    </details>
-
-    <details id="settings">
-      <summary>Settings — API key</summary>
-
-      <p class="note">
-        <b>Recommended:</b> put your Anthropic API key directly into the HTML file near the top of the script. This makes the app work even if browser storage is unavailable.
-      </p>
-
-      <p class="note">
-        You can also save the key below. A browser-saved key stays on this machine and is only sent to Anthropic.
-      </p>
-
-      <div class="row">
-        <input
-          id="keyMain"
-          type="password"
-          placeholder="sk-ant-api..."
-          autocomplete="off"
-          style="flex:1;min-width:190px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px;background:#fff;color:var(--ink)"
-        >
-
-        <button class="btn ghost" id="keyMainSave">Save key</button>
-        <button class="btn ghost" id="keyClear">Remove</button>
-      </div>
-
-      <p class="note" id="keyState">Checking API key status…</p>
-
-      <div class="tier">Backup</div>
-
-      <p class="note">
-        Before switching to a new version of this file, back up your voices, key, and saved meetings — then restore them into the new copy.
-      </p>
-
-      <div class="row">
-        <button class="btn ghost" id="backup">Back up my data</button>
-        <button class="btn ghost" id="restore">Restore from backup</button>
-        <input type="file" id="restoreFile" accept=".json" hidden>
-      </div>
-
-      <p class="note" id="backupState"></p>
-    </details>
-
-  </section>
-
-  <div class="dock">
-
-    <button class="btn rec" id="rec" data-on="0">
-      <span class="dot"></span>Start recording
-    </button>
-
-    <button class="btn ghost" id="fresh">
-      New meeting
-    </button>
-
-    <button class="btn ghost" id="take" disabled>
-      Take notes
-    </button>
-
-    <label class="auto">
-      <input type="checkbox" id="auto" checked>
-      Notes as we go
-    </label>
-
-    <button class="btn ghost" id="save" disabled>
-      Save
-    </button>
-
-    <button class="btn ghost" id="copy" disabled>
-      Copy tasks
-    </button>
-
-    <button class="btn ghost" id="copyT" disabled>
-      Copy transcript
-    </button>
-
-    <button class="btn ghost" id="md" disabled>
-      Download notes
-    </button>
-
-    <span class="hint" id="status">
-      Chrome required for live capture
-    </span>
-
+  <div class="eyebrow">
+    Who's in the room — click as they speak, or press 1–8
   </div>
+
+  <div class="keys" id="keys"></div>
+
+  <div class="listen" id="listen">
+    <span class="level"><i id="lvl"></i></span>
+    <span id="guess">Voice matching idle</span>
+  </div>
+
+  <div id="transcript"></div>
+  <div id="interim"></div>
+
+</section>
+
+<section class="pane" id="out">
+
+  <div class="eyebrow">Notes</div>
+
+  <div id="results">
+    <p class="empty">
+      Nothing extracted yet. Capture a conversation, or paste a transcript below, then take notes.
+    </p>
+  </div>
+
+  <details id="pastebox">
+    <summary>Paste a transcript instead</summary>
+
+    <p class="note">
+      Works with Teams and Zoom exports (.vtt or “Name: text” lines) — speaker names are read automatically.
+    </p>
+
+    <textarea id="paste"
+      placeholder="Kelly Frasier: Let's set the rotation for the next cycle.&#10;Me: I'll pull the ward list before Friday."></textarea>
+
+    <div class="row">
+      <button class="btn ghost" id="loadPaste">Load transcript</button>
+    </div>
+  </details>
+
+  <!-- SAVED MEETINGS ARE PRESERVED -->
+  <details id="library">
+    <summary>Saved meetings</summary>
+    <div id="savedList">
+      <p class="note">None yet.</p>
+    </div>
+  </details>
+
+  <details id="voices">
+    <summary>Voices it has learned</summary>
+
+    <p class="note">
+      Click a name while that person talks. After a few meetings the app starts guessing on its own —
+      a green dot on a name means it recognised the voice. Correct it by clicking the right name;
+      each correction sharpens the profile.
+    </p>
+
+    <div id="profList">
+      <p class="note">No voices learned yet.</p>
+    </div>
+
+    <div class="row">
+      <button class="btn ghost" id="wipeVoices">Forget all voices</button>
+    </div>
+  </details>
+
+  <details id="settings">
+    <summary>Settings — API key</summary>
+
+    <p class="note">
+      Only needed when you run this file from your own desktop.
+      Paste a key and notes start working automatically.
+      It stays on this machine and is only ever sent to Anthropic.
+    </p>
+
+    <div class="row">
+      <input id="keyMain"
+        type="password"
+        placeholder="sk-ant-api..."
+        style="flex:1;min-width:190px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px;background:#fff;color:var(--ink)">
+
+      <button class="btn ghost" id="keyMainSave">Save key</button>
+      <button class="btn ghost" id="keyClear">Remove</button>
+    </div>
+
+    <p class="note" id="keyState">No key saved.</p>
+
+    <div class="tier">Backup</div>
+
+    <p class="note">
+      Before switching to a new version of this file, back up your voices,
+      key, and saved meetings — then restore them into the new copy.
+    </p>
+
+    <div class="row">
+      <button class="btn ghost" id="backup">Back up my data</button>
+      <button class="btn ghost" id="restore">Restore from backup</button>
+      <input type="file" id="restoreFile" accept=".json" hidden>
+    </div>
+
+    <p class="note" id="backupState"></p>
+  </details>
+
+</section>
+
+<div class="dock">
+
+  <button class="btn rec" id="rec" data-on="0">
+    <span class="dot"></span>Start recording
+  </button>
+
+  <button class="btn ghost" id="fresh">New meeting</button>
+
+  <button class="btn ghost" id="take" disabled>Take notes</button>
+
+  <label class="auto">
+    <input type="checkbox" id="auto" checked>
+    Notes as we go
+  </label>
+
+  <button class="btn ghost" id="save" disabled>Save</button>
+
+  <button class="btn ghost" id="copy" disabled>Copy tasks</button>
+
+  <button class="btn ghost" id="copyT" disabled>Copy transcript</button>
+
+  <button class="btn ghost" id="md" disabled>Download notes</button>
+
+  <span class="hint" id="status">
+    Chrome required for live capture
+  </span>
+
+</div>
 
 </main>
 
@@ -740,10 +702,8 @@
 
 /* ============================================================
    ANTHROPIC API KEY
-   ============================================================
 
    EASIEST OPTION:
-
    Paste your Anthropic API key between the quotes below.
 
    Example:
@@ -751,14 +711,8 @@
    const ANTHROPIC_API_KEY = "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";
 
    IMPORTANT:
-   If you put a real API key here, keep this HTML file PRIVATE.
-   Do not upload it to GitHub, a public website, OneDrive shared
-   publicly, etc.
-
-   You can leave this blank and instead save the key through
-   Settings — API key. The browser-storage option is retained
-   below as a backup.
-
+   Keep this HTML file private if you put a real API key here.
+   Do not upload it to GitHub or a public website.
    ============================================================ */
 
 const ANTHROPIC_API_KEY = "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";
@@ -775,7 +729,7 @@ function toMomentumTask(item){
     due: item.due || null,
     source: titleEl.value || "Meeting",
     notes: item.quote
-      ? 'Said by ' + (item.said_by || 'unknown') + ': "' + item.quote + '"'
+      ? 'Said by ' + (item.said_by||'unknown') + ': "' + item.quote + '"'
       : null,
     done: false
   };
@@ -784,15 +738,21 @@ function toMomentumTask(item){
 
 /* ============================================================
    STORAGE
-   artifact storage → browser storage → memory
+
+   Priority:
+   1. artifact storage, when available
+   2. browser localStorage
+   3. in-memory fallback
+
+   SAVED MEETINGS LIVE UNDER THE "meetings" KEY.
    ============================================================ */
 
 const mem = {};
 
 const LS = (() => {
   try{
-    localStorage.setItem('_t','1');
-    localStorage.removeItem('_t');
+    localStorage.setItem('_meeting_test','1');
+    localStorage.removeItem('_meeting_test');
     return localStorage;
   }catch{
     return null;
@@ -806,14 +766,20 @@ const store = {
     if(window.storage){
       try{
         const r = await window.storage.get(k);
-        return r ? JSON.parse(r.value) : null;
+
+        if(r && r.value != null){
+          return JSON.parse(r.value);
+        }
       }catch{}
     }
 
     if(LS){
       try{
-        const v = LS.getItem('nt:' + k);
-        if(v !== null) return JSON.parse(v);
+        const v = LS.getItem('nt:'+k);
+
+        if(v !== null){
+          return JSON.parse(v);
+        }
       }catch{}
     }
 
@@ -821,6 +787,14 @@ const store = {
   },
 
   async set(k,v){
+
+    /*
+      Write to every available storage layer.
+
+      This is intentional:
+      if one storage mechanism isn't available later,
+      the other one can still preserve the meetings.
+    */
 
     if(window.storage){
       try{
@@ -830,7 +804,7 @@ const store = {
 
     if(LS){
       try{
-        LS.setItem('nt:' + k, JSON.stringify(v));
+        LS.setItem('nt:'+k, JSON.stringify(v));
       }catch{}
     }
 
@@ -840,7 +814,7 @@ const store = {
 
 
 /* ============================================================
-   ELEMENTS
+   DOM
    ============================================================ */
 
 const $ = s => document.querySelector(s);
@@ -849,36 +823,599 @@ const titleEl = $('#title');
 const keysEl = $('#keys');
 const tEl = $('#transcript');
 const interimEl = $('#interim');
-
 const recBtn = $('#rec');
 const takeBtn = $('#take');
 const saveBtn = $('#save');
 const copyBtn = $('#copy');
 const mdBtn = $('#md');
-const copyTBtn = $('#copyT');
-
 const statusEl = $('#status');
 const resultsEl = $('#results');
 const elapsedEl = $('#elapsed');
 const wcEl = $('#wc');
 
-const autoEl = $('#auto');
-
 
 /* ============================================================
-   APPLICATION STATE
+   STATE
    ============================================================ */
 
 let speakers = ['Me'];
 let active = 0;
 let turns = [];
 let notes = null;
-
 let t0 = null;
 let timer = null;
-
 let rec = null;
 let recording = false;
+
+
+/* ============================================================
+   SPEAKER KEYS
+   ============================================================ */
+
+function drawKeys(){
+
+  keysEl.innerHTML = '';
+
+  speakers.forEach((name,i)=>{
+
+    const b = document.createElement('button');
+
+    b.className = 'key';
+    b.setAttribute('aria-pressed', i === active);
+
+    if(name === guessedFor){
+      b.dataset.guess = '1';
+    }
+
+    b.innerHTML =
+      '<span class="pip"></span>' +
+      '<span class="n">'+(i+1)+'</span>' +
+      esc(name) +
+      (speakers.length>1
+        ? '<span class="x" title="Remove">&times;</span>'
+        : '');
+
+    b.onclick = e => {
+
+      if(e.target.classList.contains('x')){
+
+        speakers.splice(i,1);
+
+        if(!speakers.length){
+          speakers = ['Me'];
+        }
+
+        if(active >= speakers.length){
+          active = speakers.length-1;
+        }
+
+        drawKeys();
+        return;
+      }
+
+      active = i;
+      touched = true;
+      guessedFor = null;
+
+      drawKeys();
+
+      if(guessEl){
+        guessEl.textContent = speakers[i]+' — confirmed';
+      }
+    };
+
+    b.ondblclick = () => {
+
+      const n = prompt('Name',name);
+
+      if(n){
+        speakers[i] = n.trim();
+        drawKeys();
+        render();
+      }
+    };
+
+    keysEl.appendChild(b);
+  });
+
+  if(speakers.length < 8){
+
+    const a = document.createElement('button');
+
+    a.className = 'addkey';
+    a.textContent = '+ Add person';
+
+    a.onclick = () => {
+
+      const n = prompt('Name');
+
+      if(n){
+        speakers.push(n.trim());
+        active = speakers.length-1;
+        drawKeys();
+      }
+    };
+
+    keysEl.appendChild(a);
+  }
+}
+
+
+document.addEventListener('keydown',e=>{
+
+  if(
+    /^[1-8]$/.test(e.key) &&
+    !/INPUT|TEXTAREA/.test(document.activeElement.tagName) &&
+    !document.activeElement.isContentEditable
+  ){
+
+    const i = +e.key-1;
+
+    if(i < speakers.length){
+
+      active = i;
+      touched = true;
+      guessedFor = null;
+
+      drawKeys();
+    }
+  }
+});
+
+
+/* ============================================================
+   TRANSCRIPT
+   ============================================================ */
+
+const esc = s =>
+  String(s ?? '').replace(
+    /[&<>"]/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;'
+    }[c])
+  );
+
+const stamp = ms => {
+
+  const s = Math.floor(ms/1000);
+
+  return String(Math.floor(s/60)).padStart(2,'0') +
+    ':' +
+    String(s%60).padStart(2,'0');
+};
+
+
+function addTurn(text,who,at){
+
+  text = text.trim();
+
+  if(!text) return;
+
+  const last = turns[turns.length-1];
+
+  if(last && last.who === who && at == null){
+
+    last.text += ' ' + text;
+
+  }else{
+
+    turns.push({
+      who,
+      text,
+      at: at ?? (t0 ? Date.now()-t0 : 0)
+    });
+  }
+
+  render();
+
+  if(recording){
+    maybeAuto();
+  }
+}
+
+
+function render(){
+
+  if(!turns.length){
+
+    tEl.innerHTML =
+      '<p class="empty">' +
+      'Press <b>Start recording</b> and speak. ' +
+      'Tap a name — or press its number — whenever the speaker changes; ' +
+      'every line gets stamped to whoever is lit up.' +
+      '</p>';
+
+  }else{
+
+    tEl.innerHTML = turns.map((t,i) =>
+      '<div class="turn">' +
+        '<div class="tc">'+stamp(t.at)+'</div>' +
+        '<div>' +
+          '<div class="who">'+esc(t.who)+'</div>' +
+          '<div class="said" contenteditable data-i="'+i+'">'+
+            esc(t.text)+
+          '</div>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+
+    tEl.querySelectorAll('.said').forEach(el => {
+
+      el.onblur = () => {
+
+        turns[+el.dataset.i].text =
+          el.innerText.trim();
+
+        updateCount();
+      };
+    });
+  }
+
+  updateCount();
+
+  const has = turns.length > 0;
+
+  takeBtn.disabled = !has;
+  saveBtn.disabled = !has;
+  mdBtn.disabled = !has;
+
+  const ct = document.getElementById('copyT');
+
+  if(ct){
+    ct.disabled = !has;
+  }
+}
+
+
+function updateCount(){
+
+  const w =
+    turns
+      .map(t=>t.text)
+      .join(' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .length;
+
+  wcEl.textContent =
+    w + (w === 1 ? ' word' : ' words');
+}
+
+
+/* ============================================================
+   LIVE CAPTURE
+   ============================================================ */
+
+const SR =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+if(!SR){
+
+  recBtn.disabled = true;
+
+  statusEl.textContent =
+    'Live capture needs Chrome — use paste instead';
+}
+
+
+recBtn.onclick = () => {
+
+  recording
+    ? stopRec()
+    : startRec();
+};
+
+
+function startRec(){
+
+  try{
+
+    rec = new SR();
+
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = 'en-US';
+
+    rec.onresult = e => {
+
+      let interim = '';
+
+      for(
+        let i=e.resultIndex;
+        i<e.results.length;
+        i++
+      ){
+
+        const r = e.results[i];
+
+        if(r.isFinal){
+
+          addTurn(
+            r[0].transcript,
+            speakers[active]
+          );
+
+        }else{
+
+          interim += r[0].transcript;
+        }
+      }
+
+      interimEl.textContent = interim;
+    };
+
+
+    rec.onerror = e => {
+
+      if(e.error === 'not-allowed'){
+
+        statusEl.textContent =
+          'Microphone blocked — open this file in Chrome directly, or paste a transcript';
+
+        stopRec(false);
+
+      }else if(e.error === 'no-speech'){
+
+        statusEl.textContent =
+          'Listening — no speech detected yet';
+
+      }else{
+
+        statusEl.textContent =
+          'Capture error: '+e.error;
+      }
+    };
+
+
+    rec.onend = () => {
+
+      if(recording){
+
+        try{
+          rec.start();
+        }catch{}
+      }
+    };
+
+
+    rec.start();
+
+    startVoice();
+
+    recording = true;
+
+    recBtn.dataset.on = '1';
+
+    recBtn.innerHTML =
+      '<span class="dot"></span>Stop recording';
+
+    statusEl.textContent =
+      'Listening — press 1–8 to switch speaker';
+
+    t0 = t0 || Date.now();
+
+    timer = setInterval(
+      () => elapsedEl.textContent =
+        stamp(Date.now()-t0),
+      500
+    );
+
+    render();
+
+  }catch(err){
+
+    statusEl.textContent =
+      'Could not start: '+err.message;
+  }
+}
+
+
+function stopRec(closeNotes=true){
+
+  recording = false;
+
+  try{
+    rec && rec.stop();
+  }catch{}
+
+  stopVoice();
+
+  clearInterval(timer);
+
+  interimEl.textContent = '';
+
+  recBtn.dataset.on = '0';
+
+  recBtn.innerHTML =
+    '<span class="dot"></span>Start recording';
+
+  statusEl.textContent =
+    turns.length ? 'Stopped' : 'Stopped';
+
+  clearTimeout(autoTimer);
+
+  if(
+    closeNotes &&
+    autoEl.checked &&
+    turns.length
+  ){
+    takeNotes(true);
+  }
+}
+
+
+/* ============================================================
+   PASTE IMPORT
+   ============================================================ */
+
+$('#loadPaste').onclick = () => {
+
+  const raw = $('#paste').value.trim();
+
+  if(!raw){
+
+    statusEl.textContent =
+      'Paste a transcript first';
+
+    return;
+  }
+
+  const parsed = parseTranscript(raw);
+
+  if(!parsed.length){
+
+    statusEl.textContent =
+      'Could not read that transcript';
+
+    return;
+  }
+
+  turns = parsed;
+
+  const found =
+    [...new Set(turns.map(t=>t.who))];
+
+  if(found.length){
+
+    speakers = found.slice(0,8);
+    active = 0;
+
+    drawKeys();
+  }
+
+  $('#pastebox').open = false;
+
+  render();
+
+  statusEl.textContent =
+    'Loaded ' +
+    turns.length +
+    ' turns from ' +
+    found.length +
+    ' speakers';
+};
+
+
+function parseTranscript(raw){
+
+  const out = [];
+  const lines = raw.split(/\r?\n/);
+  let ms = 0;
+
+  const push = (who,text,at) => {
+
+    text = text.trim();
+
+    if(!text) return;
+
+    const last = out[out.length-1];
+
+    if(last && last.who === who){
+
+      last.text += ' '+text;
+
+    }else{
+
+      out.push({
+        who,
+        text,
+        at
+      });
+    }
+  };
+
+
+  for(let i=0;i<lines.length;i++){
+
+    let L = lines[i].trim();
+
+    if(
+      !L ||
+      /^WEBVTT/i.test(L) ||
+      /^\d+$/.test(L)
+    ){
+      continue;
+    }
+
+
+    const tcMatch =
+      L.match(
+        /^(\d{1,2}):(\d{2}):(\d{2})[.,](\d{3})\s*-->/
+      );
+
+    if(tcMatch){
+
+      ms =
+        (
+          +tcMatch[1]*3600 +
+          +tcMatch[2]*60 +
+          +tcMatch[3]
+        ) * 1000;
+
+      continue;
+    }
+
+
+    const v =
+      L.match(
+        /^<v\s+([^>]+)>([\s\S]*?)(?:<\/v>)?$/
+      );
+
+    if(v){
+
+      push(
+        v[1].trim(),
+        v[2],
+        ms
+      );
+
+      continue;
+    }
+
+
+    const named =
+      L.match(
+        /^([A-Z][\w.'’-]*(?:\s+[A-Z][\w.'’-]*){0,3})\s*:\s*(.+)$/
+      );
+
+    if(
+      named &&
+      named[1].length < 40
+    ){
+
+      push(
+        named[1].trim(),
+        named[2],
+        ms
+      );
+
+      continue;
+    }
+
+
+    push(
+      out.length
+        ? out[out.length-1].who
+        : 'Speaker 1',
+      L,
+      ms
+    );
+  }
+
+  return out;
+}
+
+
+/* ============================================================
+   EXTRACTION
+   ============================================================ */
+
+const autoEl = $('#auto');
 
 let extracting = false;
 let lastCount = 0;
@@ -886,44 +1423,2284 @@ let lastWords = 0;
 let autoTimer = null;
 let rawReply = '';
 
-let savedMark = '';
+
+const wordCount = () =>
+  turns
+    .map(t=>t.text)
+    .join(' ')
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .length;
+
+
+function maybeAuto(){
+
+  if(!autoEl.checked || extracting){
+    return;
+  }
+
+  if(wordCount() - lastWords < 60){
+    return;
+  }
+
+  clearTimeout(autoTimer);
+
+  autoTimer =
+    setTimeout(
+      () => takeNotes(true),
+      3500
+    );
+}
+
+
+takeBtn.onclick = () => {
+
+  if(recording){
+    stopRec(false);
+  }
+
+  takeNotes(false);
+};
 
 
 /* ============================================================
-   API KEY HANDLING
+   API KEY
    ============================================================ */
 
 async function getApiKey(){
 
   /*
-    The key embedded directly in the HTML always wins.
+    The key typed directly into the HTML takes priority.
 
-    If that is blank, the app checks browser storage.
+    Otherwise use the browser-saved key.
   */
 
-  const direct = String(ANTHROPIC_API_KEY || '').trim();
-
-  if(direct){
-    return direct;
+  if(
+    typeof ANTHROPIC_API_KEY === 'string' &&
+    ANTHROPIC_API_KEY.trim()
+  ){
+    return ANTHROPIC_API_KEY.trim();
   }
 
-  return String((await store.get('apikey')) || '').trim();
-}
-
-
-function keyLooksValid(key){
-  return /^sk-ant-/.test(String(key || '').trim());
+  return (await store.get('apikey')) || '';
 }
 
 
 /* ============================================================
-   JSON PARSING
+   ROBUST CLAUDE JSON PARSER
    ============================================================ */
 
-/*
-  Claude is instructed to return ONLY JSON.
+function parseNotesJSON(text){
 
-  However, models can occasionally return:
+  if(
+    typeof text !== 'string' ||
+    !text.trim()
+  ){
+    throw new Error(
+      'Claude returned an empty response.'
+    );
+  }
 
-  ```json
-  {...}
+  let s =
+    text
+      .replace(/^\uFEFF/,'')
+      .trim();
+
+
+  /*
+    Remove markdown fences if Claude ignored
+    the "JSON only" instruction.
+  */
+
+  s =
+    s
+      .replace(/```json\s*/gi,'')
+      .replace(/```\s*/g,'')
+      .trim();
+
+
+  try{
+    return JSON.parse(s);
+  }catch{}
+
+
+  /*
+    If Claude added a sentence before/after
+    the JSON, attempt to isolate the object.
+  */
+
+  const first = s.indexOf('{');
+  const last = s.lastIndexOf('}');
+
+  if(
+    first >= 0 &&
+    last > first
+  ){
+
+    const candidate =
+      s.slice(first,last+1);
+
+    try{
+      return JSON.parse(candidate);
+    }catch{}
+  }
+
+
+  throw new Error(
+    'Claude returned text, but it was not valid JSON. ' +
+    'The response may have been cut off.'
+  );
+}
+
+
+/* ============================================================
+   VALIDATE CLAUDE RESULT
+   ============================================================ */
+
+function validateNotes(n){
+
+  if(
+    !n ||
+    typeof n !== 'object'
+  ){
+    throw new Error(
+      'Claude returned an invalid notes object.'
+    );
+  }
+
+  if(typeof n.summary !== 'string'){
+    n.summary = '';
+  }
+
+  for(
+    const k of [
+      'decisions',
+      'action_items',
+      'likely_items',
+      'open_questions'
+    ]
+  ){
+
+    if(!Array.isArray(n[k])){
+      n[k] = [];
+    }
+  }
+
+
+  const cleanItem = x => {
+
+    if(
+      !x ||
+      typeof x !== 'object'
+    ){
+      return null;
+    }
+
+    return {
+      task: String(x.task || '').trim(),
+
+      owner:
+        x.owner
+          ? String(x.owner)
+          : null,
+
+      said_by:
+        x.said_by
+          ? String(x.said_by)
+          : null,
+
+      due:
+        x.due
+          ? String(x.due)
+          : null,
+
+      quote:
+        x.quote
+          ? String(x.quote)
+          : null
+    };
+  };
+
+
+  n.action_items =
+    n.action_items
+      .map(cleanItem)
+      .filter(x => x && x.task);
+
+
+  n.likely_items =
+    n.likely_items
+      .map(cleanItem)
+      .filter(x => x && x.task);
+
+
+  return n;
+}
+
+
+/* ============================================================
+   TAKE NOTES
+   ============================================================ */
+
+async function takeNotes(auto){
+
+  if(
+    extracting ||
+    !turns.length
+  ){
+    return;
+  }
+
+  extracting = true;
+
+  lastCount = turns.length;
+  lastWords = wordCount();
+
+  takeBtn.disabled = true;
+  takeBtn.textContent = 'Thinking…';
+
+  statusEl.className = 'hint working';
+
+  statusEl.textContent =
+    auto
+      ? 'Taking notes in the background…'
+      : 'Reading the transcript…';
+
+
+  if(!auto && !notes){
+
+    resultsEl.innerHTML =
+      '<p class="empty">Reading the transcript…</p>';
+  }
+
+
+  const script =
+    turns
+      .map(
+        t =>
+          '[' +
+          stamp(t.at) +
+          '] ' +
+          t.who +
+          ': ' +
+          t.text
+      )
+      .join('\n');
+
+
+  const prompt =
+
+`You are a meticulous professional note taker. Below is a meeting transcript with speaker labels.
+
+Distinguish carefully between who SAID something and who is RESPONSIBLE for it.
+
+Example:
+"Kelly, can you pull the numbers?" spoken by Me is an action item OWNED BY Kelly, SAID BY Me.
+
+Only record an action item if someone actually committed to or was clearly assigned something. Do not invent items to fill space.
+
+Return ONLY one valid JSON object. Do not include markdown fences, commentary, explanations, or text before or after the JSON.
+
+{
+ "summary": "3-5 sentences on what this meeting was about and where it landed",
+ "decisions": ["decisions actually reached"],
+ "action_items": [
+   {
+     "task":"imperative phrasing",
+     "owner":"name or null",
+     "said_by":"name",
+     "due":"date or timeframe as stated, else null",
+     "quote":"under 15 words of the exact line that created this"
+   }
+ ],
+ "likely_items": [
+   {
+     "task":"...",
+     "owner":"name or null",
+     "said_by":"name",
+     "due":null,
+     "quote":"..."
+   }
+ ],
+ "open_questions": ["unresolved questions raised"]
+}
+
+action_items = firm commitments and clear assignments only.
+
+likely_items = things that sound like follow-ups but nobody explicitly owned — "we should probably...", "someone needs to...", or a problem raised with no owner.
+
+Be generous here; this tier exists so nothing quietly disappears.
+
+If the conversation truly contains no work of either kind, return [] for both rather than inventing anything.
+
+Use [] for any empty section.
+
+TRANSCRIPT
+${script}`;
+
+
+  try{
+
+    const key = await getApiKey();
+
+
+    if(!key){
+
+      throw new Error(
+        'No Anthropic API key is configured. ' +
+        'Open Settings — API key and paste your key, ' +
+        'or paste the key into ANTHROPIC_API_KEY near the top of the HTML.'
+      );
+    }
+
+
+    const headers = {
+      'Content-Type':'application/json',
+      'x-api-key':key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    };
+
+
+    const r = await fetch(
+      'https://api.anthropic.com/v1/messages',
+      {
+        method:'POST',
+        headers,
+
+        body:JSON.stringify({
+
+          model:'claude-sonnet-4-6',
+
+          /*
+            1000 was too small for some transcripts.
+            Give Claude more room to finish the JSON.
+          */
+
+          max_tokens:3000,
+
+          temperature:0,
+
+          messages:[
+            {
+              role:'user',
+              content:prompt
+            }
+          ]
+        })
+      }
+    );
+
+
+    if(!r.ok){
+
+      const detail =
+        await r.text().catch(()=>'');
+
+      let message = detail;
+
+      try{
+
+        const parsed =
+          JSON.parse(detail);
+
+        message =
+          parsed?.error?.message ||
+          parsed?.message ||
+          detail;
+
+      }catch{}
+
+
+      if(
+        r.status === 401 ||
+        r.status === 403
+      ){
+
+        throw new Error(
+          'Anthropic rejected the API key. ' +
+          'Check the key in Settings — API key.'
+        );
+      }
+
+
+      if(r.status === 429){
+
+        throw new Error(
+          'Anthropic rate limit reached. ' +
+          'Wait a moment and try again.'
+        );
+      }
+
+
+      throw new Error(
+        'Anthropic API error ' +
+        r.status +
+        ': ' +
+        message.slice(0,300)
+      );
+    }
+
+
+    const data = await r.json();
+
+
+    rawReply =
+      (data.content || [])
+        .filter(c=>c.type === 'text')
+        .map(c=>c.text)
+        .join('');
+
+
+    notes =
+      validateNotes(
+        parseNotesJSON(rawReply)
+      );
+
+
+    drawNotes();
+
+    copyBtn.disabled = false;
+
+
+    const f =
+      (notes.action_items || []).length;
+
+    const s =
+      (notes.likely_items || []).length;
+
+
+    statusEl.className = 'hint';
+
+    statusEl.textContent =
+      f || s
+        ? f+' committed · '+s+' likely'
+        : 'No action items in this stretch';
+
+
+  }catch(err){
+
+    statusEl.className = 'hint';
+
+    statusEl.textContent =
+      'Notes failed — transcript is safe';
+
+    /*
+      Prevent repeated automatic failures.
+    */
+
+    autoEl.checked = false;
+
+
+    resultsEl.innerHTML =
+
+      '<p class="err">' +
+        'Couldn\\'t take notes: ' +
+        esc(err.message) +
+      '</p>' +
+
+      '<div class="tier">If notes keep failing</div>' +
+
+      '<div class="card">' +
+
+        '<p class="note" style="margin-top:0">' +
+          'The transcript is captured and safe — only the summarising step failed. ' +
+          'Press <b>Copy transcript</b> and paste it into a Claude chat; ' +
+          'you\\'ll get the same notes back in seconds.' +
+        '</p>' +
+
+        '<p class="note">' +
+          'To fix it permanently, paste an Anthropic API key below. ' +
+          'It stays on this machine and is never sent anywhere but Anthropic.' +
+        '</p>' +
+
+        '<div class="row">' +
+
+          '<input id="keyIn" ' +
+            'type="password" ' +
+            'placeholder="sk-ant-..." ' +
+            'style="flex:1;min-width:200px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px">' +
+
+          '<button class="btn ghost" id="keySave">' +
+            'Save key' +
+          '</button>' +
+
+        '</div>' +
+
+      '</div>' +
+
+      (
+        rawReply
+          ? '<details><summary>Raw response</summary>' +
+            '<pre class="raw">'+esc(rawReply)+'</pre></details>'
+          : ''
+      );
+
+
+    const ks = $('#keySave');
+
+    if(ks){
+
+      ks.onclick = async () => {
+
+        const v =
+          $('#keyIn').value.trim();
+
+        if(!v){
+          return;
+        }
+
+        if(!/^sk-ant-/.test(v)){
+
+          ks.textContent =
+            'Invalid key';
+
+          return;
+        }
+
+        await store.set(
+          'apikey',
+          v
+        );
+
+        ks.textContent =
+          'Saved — try again';
+
+        autoEl.checked = true;
+
+        await drawKeyState();
+      };
+    }
+  }
+
+
+  extracting = false;
+
+  takeBtn.disabled = false;
+  takeBtn.textContent = 'Take notes';
+
+
+  if(
+    autoEl.checked &&
+    recording
+  ){
+    maybeAuto();
+  }
+}
+
+
+/* ============================================================
+   DRAW NOTES
+   ============================================================ */
+
+function drawNotes(){
+
+  const n = notes;
+
+  let h = '';
+
+
+  h +=
+    '<h2>Summary</h2>' +
+    '<div class="card summary">' +
+      esc(n.summary) +
+    '</div>';
+
+
+  const item = (a,i,soft) =>
+
+    '<div class="card task'+
+      (soft ? ' soft' : '')+
+    '">' +
+
+      '<input type="checkbox" data-i="'+i+'">' +
+
+      '<div>' +
+
+        '<div class="t">'+
+          esc(a.task)+
+        '</div>' +
+
+        '<div class="meta">' +
+
+          '<span class="own">'+
+            esc(a.owner || 'Unassigned')+
+          '</span>' +
+
+          (
+            a.due
+              ? ' &nbsp;·&nbsp; due '+
+                esc(a.due)
+              : ''
+          ) +
+
+          (
+            a.said_by
+              ? ' &nbsp;·&nbsp; raised by '+
+                esc(a.said_by)
+              : ''
+          ) +
+
+        '</div>' +
+
+        (
+          a.quote
+            ? '<blockquote>'+
+              esc(a.quote)+
+              '</blockquote>'
+            : ''
+        ) +
+
+      '</div>' +
+
+    '</div>';
+
+
+  if(
+    (n.action_items || []).length
+  ){
+
+    h +=
+      '<h2>Action items</h2>' +
+
+      n.action_items
+        .map((a,i)=>item(a,i,false))
+        .join('');
+  }
+
+
+  if(
+    (n.likely_items || []).length
+  ){
+
+    h +=
+      '<div class="tier">Probably needs an owner</div>' +
+
+      n.likely_items
+        .map((a,i)=>item(a,'L'+i,true))
+        .join('');
+  }
+
+
+  if(
+    !(n.action_items || []).length &&
+    !(n.likely_items || []).length
+  ){
+
+    h +=
+      '<h2>Action items</h2>' +
+      '<div class="card">' +
+        '<span class="note">' +
+          'Nothing committed to yet. This section fills in as people take things on.' +
+        '</span>' +
+      '</div>';
+  }
+
+
+  if(
+    (n.decisions || []).length
+  ){
+
+    h +=
+      '<h2>Decisions</h2>' +
+      '<div class="card">' +
+        '<ul>' +
+          n.decisions
+            .map(d=>'<li>'+esc(d)+'</li>')
+            .join('') +
+        '</ul>' +
+      '</div>';
+  }
+
+
+  if(
+    (n.open_questions || []).length
+  ){
+
+    h +=
+      '<h2>Open questions</h2>' +
+      '<div class="card">' +
+        '<ul>' +
+          n.open_questions
+            .map(d=>'<li>'+esc(d)+'</li>')
+            .join('') +
+        '</ul>' +
+      '</div>';
+  }
+
+
+  h +=
+    '<details>' +
+      '<summary>Raw response</summary>' +
+      '<pre class="raw">'+
+        esc(rawReply)+
+      '</pre>' +
+    '</details>';
+
+
+  resultsEl.innerHTML = h;
+}
+
+
+/* ============================================================
+   VOICE FINGERPRINTING
+   ============================================================ */
+
+const BANDS = 12;
+const DIM = BANDS + 2;
+const MIN_FRAMES = 6;
+const ACCEPT = 0.62;
+const MARGIN = 0.86;
+
+let profiles = {};
+
+let ac = null;
+let analyser = null;
+let micStream = null;
+let rafId = null;
+
+let seg = null;
+let touched = false;
+let silence = 0;
+let guessedFor = null;
+
+const lvlEl = $('#lvl');
+const guessEl = $('#guess');
+
+
+async function startVoice(){
+
+  if(ac){
+    return;
+  }
+
+  try{
+
+    micStream =
+      await navigator.mediaDevices.getUserMedia({
+        audio:{
+          echoCancellation:false,
+          noiseSuppression:false,
+          autoGainControl:false
+        }
+      });
+
+
+    ac =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+
+    const src =
+      ac.createMediaStreamSource(
+        micStream
+      );
+
+
+    analyser =
+      ac.createAnalyser();
+
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.4;
+
+    src.connect(analyser);
+
+    loop();
+
+  }catch(e){
+
+    guessEl.textContent =
+      'Voice matching unavailable';
+  }
+}
+
+
+function stopVoice(){
+
+  cancelAnimationFrame(rafId);
+
+  if(micStream){
+
+    micStream
+      .getTracks()
+      .forEach(t=>t.stop());
+  }
+
+  if(ac){
+    ac.close();
+  }
+
+  ac = null;
+  analyser = null;
+  micStream = null;
+  seg = null;
+
+  lvlEl.style.width = '0';
+
+  guessEl.textContent =
+    'Voice matching idle';
+
+  saveProfiles();
+}
+
+
+function loop(){
+
+  rafId =
+    requestAnimationFrame(loop);
+
+  if(!analyser){
+    return;
+  }
+
+  const N = analyser.fftSize;
+
+  const time =
+    new Float32Array(N);
+
+  const freq =
+    new Float32Array(
+      analyser.frequencyBinCount
+    );
+
+
+  analyser.getFloatTimeDomainData(time);
+  analyser.getFloatFrequencyData(freq);
+
+
+  let sum = 0;
+
+  for(let i=0;i<N;i++){
+    sum += time[i]*time[i];
+  }
+
+
+  const rms =
+    Math.sqrt(sum/N);
+
+
+  lvlEl.style.width =
+    Math.min(100,rms*900)+'%';
+
+
+  if(rms < 0.012){
+
+    silence++;
+
+    if(
+      seg &&
+      silence > 26
+    ){
+      closeSeg();
+    }
+
+    return;
+  }
+
+
+  silence = 0;
+
+
+  const vec =
+    features(
+      time,
+      freq,
+      ac.sampleRate,
+      analyser.frequencyBinCount
+    );
+
+
+  if(!seg){
+
+    seg = {
+      sum:new Array(DIM).fill(0),
+      n:0
+    };
+  }
+
+
+  for(let i=0;i<DIM;i++){
+    seg.sum[i] += vec[i];
+  }
+
+  seg.n++;
+
+
+  if(
+    seg.n === MIN_FRAMES &&
+    !touched
+  ){
+    tryGuess(mean(seg));
+  }
+}
+
+
+function features(
+  time,
+  freq,
+  sr,
+  bins
+){
+
+  const out =
+    new Array(DIM).fill(0);
+
+  const lo = 80;
+  const hi = 5200;
+  const hzPerBin = (sr/2)/bins;
+
+
+  for(
+    let b=0;
+    b<BANDS;
+    b++
+  ){
+
+    const f0 =
+      lo*Math.pow(
+        hi/lo,
+        b/BANDS
+      );
+
+    const f1 =
+      lo*Math.pow(
+        hi/lo,
+        (b+1)/BANDS
+      );
+
+
+    let acc = 0;
+    let c = 0;
+
+
+    for(
+      let k=Math.floor(f0/hzPerBin);
+      k<Math.ceil(f1/hzPerBin) && k<bins;
+      k++
+    ){
+
+      acc += freq[k];
+      c++;
+    }
+
+
+    out[b] =
+      c
+        ? acc/c
+        : -100;
+  }
+
+
+  const m =
+    out
+      .slice(0,BANDS)
+      .reduce((a,b)=>a+b,0)/BANDS;
+
+
+  let norm = 0;
+
+
+  for(
+    let b=0;
+    b<BANDS;
+    b++
+  ){
+
+    out[b] =
+      (out[b]-m)/18;
+
+    norm +=
+      out[b]*out[b];
+  }
+
+
+  norm =
+    Math.sqrt(norm) || 1;
+
+
+  for(
+    let b=0;
+    b<BANDS;
+    b++
+  ){
+    out[b] /= norm;
+  }
+
+
+  out[BANDS] =
+    Math.log(
+      pitch(time,sr) || 120
+    ) /
+    Math.log(400);
+
+
+  let num = 0;
+  let den = 0;
+
+
+  for(
+    let k=0;
+    k<bins;
+    k++
+  ){
+
+    const p =
+      Math.pow(
+        10,
+        freq[k]/20
+      );
+
+    num +=
+      k*hzPerBin*p;
+
+    den += p;
+  }
+
+
+  out[BANDS+1] =
+    den
+      ? Math.min(
+          1,
+          (num/den)/4000
+        )
+      : 0;
+
+
+  return out;
+}
+
+
+function pitch(buf,sr){
+
+  const lo =
+    Math.floor(sr/350);
+
+  const hi =
+    Math.floor(sr/70);
+
+  let best = -1;
+  let bestLag = -1;
+
+
+  for(
+    let lag=lo;
+    lag<hi;
+    lag++
+  ){
+
+    let c = 0;
+
+
+    for(
+      let i=0;
+      i<buf.length-lag;
+      i++
+    ){
+
+      c +=
+        buf[i] *
+        buf[i+lag];
+    }
+
+
+    if(c > best){
+
+      best = c;
+      bestLag = lag;
+    }
+  }
+
+
+  return bestLag > 0
+    ? sr/bestLag
+    : 0;
+}
+
+
+const mean =
+  s =>
+    s.sum.map(
+      v=>v/s.n
+    );
+
+
+const dist =
+  (a,b) => {
+
+    let d = 0;
+
+    for(
+      let i=0;
+      i<DIM;
+      i++
+    ){
+
+      const x =
+        a[i]-b[i];
+
+      d += x*x;
+    }
+
+    return Math.sqrt(d);
+  };
+
+
+function tryGuess(vec){
+
+  const names =
+    Object.keys(profiles)
+      .filter(
+        n =>
+          speakers.includes(n) &&
+          profiles[n].n >= 4
+      );
+
+
+  if(names.length < 2){
+
+    guessEl.textContent =
+      'Learning voices — keep clicking names';
+
+    return;
+  }
+
+
+  const scored =
+    names
+      .map(
+        n=>({
+          n,
+          d:dist(
+            vec,
+            profiles[n].v
+          )
+        })
+      )
+      .sort(
+        (a,b)=>a.d-b.d
+      );
+
+
+  const best = scored[0];
+  const second = scored[1];
+
+
+  const confident =
+    best.d < ACCEPT &&
+    best.d < second.d*MARGIN;
+
+
+  if(confident){
+
+    const i =
+      speakers.indexOf(best.n);
+
+
+    if(i >= 0){
+
+      active = i;
+      guessedFor = best.n;
+
+      drawKeys();
+    }
+
+
+    guessEl.textContent =
+      'Sounds like '+best.n;
+
+  }else{
+
+    guessedFor = null;
+
+    drawKeys();
+
+    guessEl.textContent =
+      'Not sure who — click a name';
+  }
+}
+
+
+function closeSeg(){
+
+  const s = seg;
+
+  seg = null;
+
+
+  if(
+    !s ||
+    s.n < MIN_FRAMES
+  ){
+
+    touched = false;
+
+    return;
+  }
+
+
+  const vec = mean(s);
+  const name = speakers[active];
+
+
+  train(
+    name,
+    vec,
+    touched
+      ? 1
+      : (
+        guessedFor === name
+          ? 0.25
+          : 0
+      )
+  );
+
+
+  touched = false;
+  guessedFor = null;
+
+  drawProfiles();
+}
+
+
+function train(
+  name,
+  vec,
+  weight
+){
+
+  if(
+    !name ||
+    weight <= 0
+  ){
+    return;
+  }
+
+
+  const p =
+    profiles[name] ||
+    (
+      profiles[name] = {
+        v:vec.slice(),
+        n:0
+      }
+    );
+
+
+  const w = weight;
+  const n = p.n;
+
+
+  for(
+    let i=0;
+    i<DIM;
+    i++
+  ){
+
+    p.v[i] =
+      (
+        p.v[i]*n +
+        vec[i]*w
+      ) /
+      (n+w);
+  }
+
+
+  p.n =
+    n+w;
+}
+
+
+async function saveProfiles(){
+
+  await store.set(
+    'voices',
+    profiles
+  );
+}
+
+
+async function loadProfiles(){
+
+  profiles =
+    (await store.get('voices')) || {};
+
+  drawProfiles();
+}
+
+
+function drawProfiles(){
+
+  const el =
+    $('#profList');
+
+  const names =
+    Object.keys(profiles);
+
+
+  if(!names.length){
+
+    el.innerHTML =
+      '<p class="note">No voices learned yet.</p>';
+
+    return;
+  }
+
+
+  el.innerHTML =
+    names
+      .sort()
+      .map(n => {
+
+        const c =
+          Math.round(
+            profiles[n].n
+          );
+
+        const state =
+          c < 4
+            ? 'learning'
+            : c < 12
+              ? 'usable'
+              : 'confident';
+
+
+        return (
+          '<div class="prof">' +
+            '<span>'+esc(n)+'</span>' +
+            '<span class="c">'+
+              c+
+              ' samples · '+
+              state+
+            '</span>' +
+          '</div>'
+        );
+      })
+      .join('');
+}
+
+
+$('#wipeVoices').onclick =
+  async () => {
+
+    if(
+      !confirm(
+        'Forget every learned voice? Names and transcripts are untouched.'
+      )
+    ){
+      return;
+    }
+
+    profiles = {};
+
+    await saveProfiles();
+
+    drawProfiles();
+  };
+
+
+/* ============================================================
+   NEW MEETING
+   ============================================================
+
+   IMPORTANT:
+   This only clears the CURRENT meeting.
+
+   It does NOT clear the Saved Meetings library.
+   ============================================================ */
+
+let savedMark = '';
+
+
+$('#fresh').onclick = () => {
+
+  const dirty =
+    turns.length &&
+    JSON.stringify(turns) !== savedMark;
+
+
+  if(
+    dirty &&
+    !confirm(
+      'This meeting has unsaved notes. Start a new one anyway?'
+    )
+  ){
+    return;
+  }
+
+
+  if(recording){
+
+    const a = autoEl.checked;
+
+    autoEl.checked = false;
+
+    stopRec(false);
+
+    autoEl.checked = a;
+  }
+
+
+  clearTimeout(autoTimer);
+  clearInterval(timer);
+
+
+  turns = [];
+  notes = null;
+  rawReply = '';
+  lastCount = 0;
+  lastWords = 0;
+  savedMark = '';
+
+  t0 = null;
+
+  elapsedEl.textContent =
+    '00:00';
+
+  titleEl.value = '';
+
+  active = 0;
+
+
+  resultsEl.innerHTML =
+    '<p class="empty">' +
+      'Nothing extracted yet. Start recording, or paste a transcript below.' +
+    '</p>';
+
+
+  copyBtn.disabled = true;
+
+  $('#paste').value = '';
+
+  drawKeys();
+  render();
+
+
+  statusEl.className =
+    'hint';
+
+  statusEl.textContent =
+    'New meeting — the same people carried over';
+
+  titleEl.focus();
+};
+
+
+/* ============================================================
+   OUTPUTS
+   ============================================================ */
+
+const copyTBtn =
+  $('#copyT');
+
+
+copyTBtn.onclick =
+  async () => {
+
+    const script =
+      turns
+        .map(
+          t =>
+            '['+
+            stamp(t.at)+
+            '] '+
+            t.who+
+            ': '+
+            t.text
+        )
+        .join('\n');
+
+
+    const block =
+      'Take professional meeting notes from this transcript: summary, decisions, '+
+      'action items with owner (who is responsible, not who spoke) and due date, and open questions.\n\n'+
+      (
+        titleEl.value
+          ? 'Meeting: '+titleEl.value+'\n\n'
+          : ''
+      )+
+      script;
+
+
+    try{
+
+      await navigator.clipboard.writeText(
+        block
+      );
+
+      copyTBtn.textContent =
+        'Copied — paste in chat';
+
+    }catch{
+
+      copyTBtn.textContent =
+        'Copy blocked';
+    }
+
+
+    setTimeout(
+      ()=>copyTBtn.textContent='Copy transcript',
+      2200
+    );
+  };
+
+
+copyBtn.onclick =
+  async () => {
+
+    const payload = [
+
+      ...(notes.action_items || [])
+        .map(toMomentumTask),
+
+      ...(notes.likely_items || [])
+        .map(
+          a => ({
+            ...toMomentumTask(a),
+            tentative:true
+          })
+        )
+    ];
+
+
+    try{
+
+      await navigator.clipboard.writeText(
+        JSON.stringify(
+          payload,
+          null,
+          2
+        )
+      );
+
+      copyBtn.textContent =
+        'Copied';
+
+    }catch{
+
+      copyBtn.textContent =
+        'Copy blocked';
+    }
+
+
+    setTimeout(
+      ()=>copyBtn.textContent='Copy tasks',
+      1400
+    );
+  };
+
+
+mdBtn.onclick = () => {
+
+  const t =
+    titleEl.value ||
+    'Meeting notes';
+
+  let m =
+    '# '+t+'\n\n';
+
+
+  if(notes){
+
+    m +=
+      notes.summary+
+      '\n\n## Action items\n';
+
+
+    (notes.action_items || [])
+      .forEach(a => {
+
+        m +=
+          '- [ ] **'+
+          (a.owner || 'Unassigned')+
+          '** — '+
+          a.task+
+          (
+            a.due
+              ? ' _(due '+a.due+')_'
+              : ''
+          )+
+          '\n';
+      });
+
+
+    if(
+      (notes.likely_items || []).length
+    ){
+
+      m +=
+        '\n## Likely follow-ups\n';
+
+      notes.likely_items
+        .forEach(a => {
+
+          m +=
+            '- [ ] **'+
+            (a.owner || 'Unassigned')+
+            '** — '+
+            a.task+
+            '\n';
+        });
+    }
+
+
+    if(
+      (notes.decisions || []).length
+    ){
+
+      m +=
+        '\n## Decisions\n'+
+        notes.decisions
+          .map(d=>'- '+d)
+          .join('\n')+
+        '\n';
+    }
+
+
+    if(
+      (notes.open_questions || []).length
+    ){
+
+      m +=
+        '\n## Open questions\n'+
+        notes.open_questions
+          .map(d=>'- '+d)
+          .join('\n')+
+        '\n';
+    }
+  }
+
+
+  m +=
+    '\n## Transcript\n\n'+
+    turns
+      .map(
+        x =>
+          '**'+
+          x.who+
+          '** ('+
+          stamp(x.at)+
+          '): '+
+          x.text
+      )
+      .join('\n\n')+
+    '\n';
+
+
+  const a =
+    document.createElement('a');
+
+
+  a.href =
+    URL.createObjectURL(
+      new Blob(
+        [m],
+        {type:'text/markdown'}
+      )
+    );
+
+
+  a.download =
+    t
+      .replace(/[^\w\s-]/g,'')
+      .trim()
+      .replace(/\s+/g,'-')
+      .toLowerCase()+
+    '.md';
+
+
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+};
+
+
+/* ============================================================
+   SAVE / RELOAD
+
+   SAVED MEETINGS ARE PRESERVED.
+
+   Each save:
+   - reads the existing meetings
+   - adds the new meeting to the front
+   - keeps the existing meetings
+   - limits the library to the newest 50
+   ============================================================ */
+
+saveBtn.onclick =
+  async () => {
+
+    try{
+
+      const existing =
+        (await store.get('meetings')) || [];
+
+
+      const all =
+        Array.isArray(existing)
+          ? existing
+          : [];
+
+
+      const meeting = {
+
+        id:Date.now(),
+
+        title:
+          titleEl.value ||
+          'Untitled meeting',
+
+        when:
+          new Date()
+            .toLocaleString(),
+
+        speakers:
+          Array.isArray(speakers)
+            ? [...speakers]
+            : ['Me'],
+
+        turns:
+          Array.isArray(turns)
+            ? turns.map(t=>({...t}))
+            : [],
+
+        notes:
+          notes
+            ? JSON.parse(
+                JSON.stringify(notes)
+              )
+            : null
+      };
+
+
+      /*
+        IMPORTANT:
+        Add the new meeting WITHOUT
+        replacing the old library.
+      */
+
+      all.unshift(meeting);
+
+
+      /*
+        Keep the newest 50 meetings.
+        Existing saved meetings are retained
+        until this limit is reached.
+      */
+
+      await store.set(
+        'meetings',
+        all.slice(0,50)
+      );
+
+
+      savedMark =
+        JSON.stringify(turns);
+
+
+      saveBtn.textContent =
+        'Saved';
+
+
+      setTimeout(
+        ()=>saveBtn.textContent='Save',
+        1400
+      );
+
+
+      await drawLibrary();
+
+
+      statusEl.className =
+        'hint';
+
+      statusEl.textContent =
+        'Meeting saved — '+all.length+
+        ' saved meeting'+
+        (all.length === 1 ? '' : 's')+
+        ' in library';
+
+
+    }catch(err){
+
+      statusEl.className =
+        'hint working';
+
+      statusEl.textContent =
+        'Could not save meeting: '+
+        err.message;
+    }
+  };
+
+
+/* ============================================================
+   SAVED MEETINGS LIBRARY
+
+   This function is deliberately defensive so that
+   an older saved meeting can't break the entire library.
+   ============================================================ */
+
+async function drawLibrary(){
+
+  const existing =
+    await store.get('meetings');
+
+
+  const all =
+    Array.isArray(existing)
+      ? existing
+      : [];
+
+
+  const el =
+    $('#savedList');
+
+
+  if(!all.length){
+
+    el.innerHTML =
+      '<p class="note">None yet.</p>';
+
+    return;
+  }
+
+
+  el.innerHTML = '';
+
+
+  all.forEach((m,index) => {
+
+    /*
+      Protect against an incomplete/older record.
+    */
+
+    const safeTitle =
+      m && m.title
+        ? m.title
+        : 'Untitled meeting';
+
+
+    const safeWhen =
+      m && m.when
+        ? m.when
+        : 'Saved meeting';
+
+
+    const safeTurns =
+      Array.isArray(m?.turns)
+        ? m.turns
+        : [];
+
+
+    const safeSpeakers =
+      Array.isArray(m?.speakers) &&
+      m.speakers.length
+        ? m.speakers
+        : ['Me'];
+
+
+    const d =
+      document.createElement('div');
+
+
+    d.className =
+      'saved';
+
+
+    d.innerHTML =
+      '<span>' +
+
+        '<b>'+
+          esc(safeTitle)+
+        '</b>' +
+
+        '<br>' +
+
+        '<span class="note">' +
+          esc(safeWhen)+
+          ' · '+
+          safeTurns.length+
+          ' turns' +
+        '</span>' +
+
+      '</span>';
+
+
+    const b =
+      document.createElement('button');
+
+
+    b.textContent =
+      'Open';
+
+
+    b.onclick = () => {
+
+      /*
+        Opening a saved meeting only replaces
+        the CURRENT meeting.
+
+        It does NOT modify or delete the library.
+      */
+
+      titleEl.value =
+        safeTitle;
+
+
+      speakers =
+        [...safeSpeakers];
+
+
+      turns =
+        safeTurns.map(
+          t=>({
+            who:String(t?.who || 'Speaker'),
+            text:String(t?.text || ''),
+            at:Number(t?.at || 0)
+          })
+        );
+
+
+      notes =
+        m && m.notes
+          ? m.notes
+          : null;
+
+
+      active = 0;
+
+      lastCount =
+        turns.length;
+
+      lastWords =
+        wordCount();
+
+      savedMark =
+        JSON.stringify(turns);
+
+      t0 = null;
+
+
+      drawKeys();
+      render();
+
+
+      if(notes){
+
+        try{
+
+          rawReply =
+            rawReply ||
+            '';
+
+          drawNotes();
+
+          copyBtn.disabled =
+            false;
+
+        }catch{
+          notes = null;
+        }
+      }else{
+
+        copyBtn.disabled =
+          true;
+      }
+
+
+      $('#library').open =
+        false;
+
+
+      statusEl.className =
+        'hint';
+
+      statusEl.textContent =
+        'Loaded saved meeting — library preserved';
+    };
+
+
+    d.appendChild(b);
+
+    el.appendChild(d);
+  });
+}
+
+
+/* ============================================================
+   SETTINGS / API KEY
+   ============================================================ */
+
+async function drawKeyState(){
+
+  const stored =
+    await store.get('apikey');
+
+
+  if(
+    ANTHROPIC_API_KEY &&
+    ANTHROPIC_API_KEY.trim()
+  ){
+
+    $('#keyState').textContent =
+      'API key configured in this HTML file. ' +
+      'Browser-saved key is not required.';
+
+    return;
+  }
+
+
+  if(stored){
+
+    $('#keyState').textContent =
+      'Key saved — ends in '+
+      String(stored).slice(-4)+
+      '. Notes run automatically.';
+
+  }else{
+
+    $('#keyState').textContent =
+      'No key saved. Notes work inside a Claude chat, or use Copy transcript.';
+  }
+}
+
+
+$('#keyMainSave').onclick =
+  async () => {
+
+    const v =
+      $('#keyMain')
+        .value
+        .trim();
+
+
+    if(!v){
+
+      $('#keyState').textContent =
+        'Paste a key first.';
+
+      return;
+    }
+
+
+    if(!/^sk-ant-/.test(v)){
+
+      $('#keyState').textContent =
+        "That doesn't look like an Anthropic key — it should start with sk-ant-.";
+
+      return;
+    }
+
+
+    await store.set(
+      'apikey',
+      v
+    );
+
+
+    $('#keyMain').value = '';
+
+    autoEl.checked = true;
+
+
+    await drawKeyState();
+
+
+    statusEl.textContent =
+      'Key saved — press Take notes to test it';
+  };
+
+
+$('#keyClear').onclick =
+  async () => {
+
+    await store.set(
+      'apikey',
+      ''
+    );
+
+    await drawKeyState();
+  };
+
+
+/* ============================================================
+   BACKUP
+
+   Includes:
+   - voices
+   - API key
+   - ALL saved meetings
+   ============================================================ */
+
+$('#backup').onclick =
+  async () => {
+
+    const dump = {
+
+      v:2,
+
+      saved:
+        new Date()
+          .toISOString(),
+
+      voices:
+        await store.get('voices'),
+
+      apikey:
+        await store.get('apikey'),
+
+      meetings:
+        await store.get('meetings')
+    };
+
+
+    const a =
+      document.createElement('a');
+
+
+    a.href =
+      URL.createObjectURL(
+        new Blob(
+          [
+            JSON.stringify(
+              dump,
+              null,
+              2
+            )
+          ],
+          {type:'application/json'}
+        )
+      );
+
+
+    a.download =
+      'notetaker-backup.json';
+
+
+    a.click();
+
+    URL.revokeObjectURL(a.href);
+
+
+    $('#backupState').textContent =
+      'Backed up voices, API key, and saved meetings to your Downloads folder. Keep this backup private.';
+  };
+
+
+/* ============================================================
+   RESTORE
+
+   Restores:
+   - voices
+   - API key
+   - saved meetings
+
+   IMPORTANT:
+   Restore REPLACES the current stored library
+   with the library contained in the backup.
+   ============================================================ */
+
+$('#restore').onclick =
+  () =>
+    $('#restoreFile').click();
+
+
+$('#restoreFile').onchange =
+  async e => {
+
+    const f =
+      e.target.files[0];
+
+
+    if(!f){
+      return;
+    }
+
+
+    try{
+
+      const d =
+        JSON.parse(
+          await f.text()
+        );
+
+
+      if(d.voices){
+
+        await store.set(
+          'voices',
+          d.voices
+        );
+      }
+
+
+      if(
+        Object.prototype.hasOwnProperty.call(
+          d,
+          'apikey'
+        )
+      ){
+
+        await store.set(
+          'apikey',
+          d.apikey || ''
+        );
+      }
+
+
+      if(
+        Array.isArray(d.meetings)
+      ){
+
+        await store.set(
+          'meetings',
+          d.meetings
+        );
+      }
+
+
+      await loadProfiles();
+
+      await drawKeyState();
+
+      await drawLibrary();
+
+
+      $('#backupState').textContent =
+        'Restored '+
+        Object.keys(d.voices || {}).length+
+        ' voices and '+
+        (d.meetings || []).length+
+        ' saved meetings.';
+
+    }catch(err){
+
+      $('#backupState').textContent =
+        'That file could not be read — is it the backup JSON?';
+    }
+
+
+    /*
+      Allow the same backup file to be selected again.
+    */
+
+    e.target.value = '';
+  };
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+
+drawKeys();
+render();
+drawLibrary();
+drawKeyState();
+loadProfiles();
+
+</script>
+
+</body>
+</html>
