@@ -225,6 +225,7 @@
           style="flex:1;min-width:190px;font-family:var(--mono);font-size:12px;padding:9px;border:1px solid var(--rule);border-radius:2px;background:#fff;color:var(--ink)">
         <button class="btn ghost" id="keyMainSave">Save key</button>
         <button class="btn ghost" id="keyClear">Remove</button>
+      <button class="btn ghost" id="keyTest">Test key</button>
       </div>
       <p class="note" id="keyState">No key saved.</p>
       <div class="tier">Backup</div>
@@ -521,7 +522,7 @@ ${script}`;
       const detail=await r.text().catch(()=>'');
       throw new Error(r.status+(r.status===401||r.status===403
         ? ' — no API access from this page. See "If notes keep failing" below.'
-        : ' '+detail.slice(0,120)));
+        : ' '+detail.slice(0,400)));
     }
     const data=await r.json();
     addUsage(data.usage);
@@ -847,6 +848,22 @@ $('#restoreFile').onchange=async e=>{
     await loadProfiles(); await drawKeyState(); await drawLibrary();
     $('#backupState').textContent='Restored '+Object.keys(d.voices||{}).length+' voices and '+((d.meetings||[]).length)+' meetings.';
   }catch(err){ $('#backupState').textContent='That file could not be read — is it the backup JSON?'; }
+};
+
+
+$('#keyTest').onclick=async()=>{
+  const el=$('#keyState'); el.textContent='Testing…';
+  const key=(await store.get('apikey'))||'';
+  if(!key){ el.textContent='No key saved yet — paste one above and press Save key first.'; return; }
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",
+      headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+      body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:20,messages:[{role:"user",content:"Reply with the word ok"}]})});
+    const t=await r.text();
+    el.textContent = r.ok ? 'Key works — Anthropic replied OK.' : 'Anthropic said '+r.status+': '+t.slice(0,400);
+  }catch(e){
+    el.textContent='Request never reached Anthropic ('+e.message+'). Usually an ad-blocker, VPN/work network, or privacy extension blocking api.anthropic.com.';
+  }
 };
 
 const APP_VERSION = "VERSION 10 (2026-10-02)"; console.log("%cNoteTaker "+APP_VERSION, "font-size:14px;font-weight:bold;color:#2C6C5B");
